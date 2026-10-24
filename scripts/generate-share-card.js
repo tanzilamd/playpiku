@@ -9,6 +9,9 @@ const favicon = await readFile(
   "utf8",
 );
 const palette = {
+  harvest: "#b4c98d",
+  highway: "#9dbbb6",
+  trails: "#b8c7b5",
   racing: "#83ac8c",
   defense: "#8bb398",
   fairway: "#94b8a3",

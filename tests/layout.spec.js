@@ -21,7 +21,7 @@ test("whole-site layout, dialogs and controls stay usable across screen sizes", 
   for (const [width, height] of sizes) {
     await page.setViewportSize({ width, height });
     await page.goto("./");
-    await expect(page.locator(".game-card")).toHaveCount(14);
+    await expect(page.locator(".game-card")).toHaveCount(17);
     await page.keyboard.press("Tab");
     await expect(page.locator(".skip-link")).toBeFocused();
     await expect(page.locator(".skip-link")).toHaveCSS("clip-path", "none");

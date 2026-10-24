@@ -34,7 +34,7 @@ test("logo, clean URLs, legacy links, reloads and back navigation work without h
   await expect(page.locator("#game-board")).toBeVisible();
   await page.getByRole("link", { name: "PlayPiku home" }).click();
   await expect(page).toHaveURL(/\/playpiku\/$/);
-  await expect(page.locator(".game-card")).toHaveCount(14);
+  await expect(page.locator(".game-card")).toHaveCount(17);
   await page.goBack();
   await expect(page.locator("h1")).toHaveText("Piku Rally.");
   await page.goto("./#/play/golf");
@@ -80,7 +80,7 @@ test("home variants and every game expose preview metadata and PNGs to crawlers 
     expect(response.status()).toBe(200);
     const tags = metadata(await response.text());
     expect(tags["og:url"]).toBe(SITE_URL);
-    expect(tags["og:image"]).toContain("playpiku-share-v2.png");
+    expect(tags["og:image"]).toContain("playpiku-share-v3.png");
   }
   for (const game of games) {
     for (const agent of [
@@ -100,7 +100,7 @@ test("home variants and every game expose preview metadata and PNGs to crawlers 
       expect(html).toContain('<base href="/playpiku/"');
     }
     const response = await request.get(
-      new URL(`/playpiku/assets/share-${game.id}-v2.png`, baseURL).href,
+      new URL(`/playpiku/assets/share-${game.id}-v3.png`, baseURL).href,
     );
     expect(response.status()).toBe(200);
     expect(response.headers()["content-type"]).toContain("image/png");

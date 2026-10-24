@@ -1,8 +1,8 @@
 # PlayPiku
 
-A little play. A better day. Fourteen browser games with an English interface, responsive layouts, first-visit tutorials, keyboard and touch controls, and local personal records.
+A little play. A better day. Seventeen browser games with an English interface, responsive layouts, first-visit tutorials, keyboard and touch controls, and local personal records.
 
-**Games:** Piku Rally, Pocket Tower Defense, Mini Golf, Word Hunt, Piku Stack, Block Puzzle, Minesweeper, Piku Dash, 2048, Memory Match, Snake, Reaction Test, Tic Tac Toe, and Brick Breaker.
+**Games:** Piku Harvest, Piku Traffic Rush, Piku Moto Trails, Piku Rally, Pocket Tower Defense, Mini Golf, Word Hunt, Piku Stack, Block Puzzle, Minesweeper, Piku Dash, 2048, Memory Match, Snake, Reaction Test, Tic Tac Toe, and Brick Breaker.
 
 **Production:** [PlayPiku](https://tanzilahmed.tech/playpiku/) · [Deployment workflow](https://github.com/tanzilamd/playpiku/actions/workflows/pages.yml)
 
@@ -53,7 +53,7 @@ GitHub Pages must be available for the repository's visibility and account plan.
 
 ## What stays on the device
 
-Best scores, settings, first-visit guide preferences, and the current 2048 and Block Puzzle boards and Mini Golf progress between shots use namespaced `localStorage`. They do not sync across devices. If storage is blocked, games still work and state lasts only for the current visit. Reset records in Settings clears best scores; clearing browser site data clears everything.
+Best scores, settings, first-visit guide preferences, and the current 2048 and Block Puzzle boards Mini Golf progress between shots, the current Harvest garden and farm progression, Traffic garage coins/owned cars, and Moto best-run ghosts use namespaced `localStorage`. They do not sync across devices. If storage is blocked, games still work and state lasts only for the current visit. Reset records in Settings clears best scores; clearing browser site data clears everything.
 
 Memory has three board sizes and separate best move counts. Snake has three speeds and separate best scores. Reaction Test records the best five-round average in milliseconds; device/input latency affects results. Tic Tac Toe supports two players on one device or easy/hard computer opponents, with a session-only match tally. Brick Breaker has three levels and three lives.
 
@@ -65,9 +65,15 @@ The whole-site layout suite checks every game and help dialog across phone, land
 
 Piku Rally has three tracks, unlimited Practice and three-lap Relaxed/Classic races, auto acceleration, keyboard and multi-touch steering/braking, pause, and reset penalties. Race records are stored separately by track and difficulty. Pocket Tower Defense has two maps, ten waves, three tower types, upgrades, a 70% sell refund, build previews, pause-to-plan, and 2× speed. Active races and defense matches restart when reloading; best records persist.
 
+Piku Harvest has 24 authored match-3 gardens, crop goals, one/two-layer garden patches, four-match line specials, five-match color specials, cascade scoring, goal-aware free hints, and one free shuffle per level. Adventure has finite moves and earns 1–3 stars; Relaxed has unlimited moves and also unlocks levels. Swaps that make no match spend no move. The settled board, goals and level journey save; partially played animations cannot leave an unstable save.
+
+Piku Traffic Rush offers Endless and 1,500-metre Challenge modes, keyboard/swipe lane changes, braking, rechargeable nitro, coins and close-pass bonuses. Traffic rows always leave a clear lane, with enough distance between rows for lane changes at maximum boost speed. Three cosmetic cars have identical handling; coins are earned in play and banked once when a run ends. Leaving an unfinished run does not bank its coins. Best scores are separate by mode.
+
+Piku Moto Trails has twelve countryside/desert/mountain tracks with smooth terrain, jumps, lean controls and gentle balance assistance. All tracks are available. Checkpoint returns add three seconds; final records include penalties. Finishing earns a medal. A new best run saves a bounded, validated ghost for that track, which can be hidden. Racing runs restart on reload. Reset records removes new best scores and Moto ghosts while keeping Harvest boards, level unlocks/stars and earned garage items.
+
 ## Accessibility and controls
 
-All navigation and button-based games support keyboard interaction. The rules explain keyboard and touch controls per game. Timed/action games pause when hidden or when a help/settings dialog opens; they resume only when requested. Motion follows the operating system preference and can also be reduced in Settings. Sound is optional and off by default. Canvas-based Piku Rally, Pocket Tower Defense, Mini Golf, Piku Stack, Snake, Brick Breaker, and Piku Dash expose controls and score/status text but do not provide a fully equivalent nonvisual gameplay mode.
+All navigation and button-based games support keyboard interaction. The rules explain keyboard and touch controls per game. Timed/action games pause when hidden or when a help/settings dialog opens; they resume only when requested. Motion follows the operating system preference and can also be reduced in Settings. Sound is optional and off by default. Canvas-based Piku Traffic Rush, Piku Moto Trails, Piku Rally, Pocket Tower Defense, Mini Golf, Piku Stack, Snake, Brick Breaker, and Piku Dash expose controls and score/status text but do not provide a fully equivalent nonvisual gameplay mode.
 
 ## Project structure
 

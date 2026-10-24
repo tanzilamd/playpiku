@@ -3358,3 +3358,526 @@ dialog > .button {
     font-size: 11px;
   }
 }
+/* Little farm journeys and two different kinds of open road. */
+.art-harvest {
+  background: #b4c98d;
+}
+.art-highway {
+  background: #9dbbb6;
+}
+.art-trails {
+  background: #b8c7b5;
+}
+.harvest-board {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 5px;
+  width: min(100%, 420px);
+  padding: 9px;
+  border: 1px solid #527052;
+  border-radius: 17px;
+  background: #253e30;
+  aspect-ratio: 1;
+  touch-action: none;
+}
+.crop-cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  padding: 2px;
+  aspect-ratio: 1;
+  border: 1px solid #657550;
+  border-radius: 10px;
+  background: #3a513a;
+  cursor: pointer;
+  transition:
+    transform 0.18s,
+    background 0.18s,
+    opacity 0.18s;
+}
+.crop-cell svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 3px 1px #14291a55);
+}
+.crop-cell:disabled {
+  cursor: default;
+  opacity: 1;
+}
+.crop-cell.selected {
+  background: #647749;
+  border-color: #edecb6;
+  outline: 2px solid #f1e3a2;
+  outline-offset: 1px;
+  z-index: 1;
+}
+.crop-cell.hinted {
+  border-color: #e5eaba;
+  box-shadow: inset 0 0 0 2px #dae899;
+}
+.crop-cell.garden-patch {
+  background: #648249;
+  box-shadow: inset 0 -5px #789647;
+}
+.crop-cell.thick-patch {
+  background: #7c9347;
+  border: 2px dashed #bfd47d;
+}
+.crop-cell.clearing {
+  opacity: 0.15;
+  transform: scale(0.65) rotate(9deg);
+}
+.crop-special {
+  position: absolute;
+  bottom: 0;
+  right: 1px;
+  min-width: 19px;
+  border-radius: 5px;
+  background: #f3e8ba;
+  color: #374a31;
+  font-weight: 900;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  box-shadow: 0 1px 4px #16352177;
+}
+.harvest-goals {
+  display: flex;
+  gap: 9px;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: 0 0 14px;
+}
+.harvest-goal {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border: 1px solid #57654b;
+  border-radius: 10px;
+  color: #edf0d3;
+  background: #2d3c2b;
+  font-size: 16px;
+  font-weight: 800;
+}
+.harvest-goal svg {
+  width: 32px;
+  height: 32px;
+}
+.harvest-goal small {
+  font-size: 11px;
+  color: #bdc7ac;
+  font-weight: 500;
+}
+.harvest-goal.complete {
+  border-color: #b2d17d;
+  background: #425d34;
+}
+.grass-icon {
+  color: #c9e398;
+  font-size: 28px;
+}
+.harvest-tip {
+  max-width: 420px;
+  text-align: center;
+  color: #bdc8ab;
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 13px 0 0;
+}
+.harvest-paused {
+  opacity: 0.55;
+}
+.harvest-map,
+.traffic-garage {
+  width: 100%;
+  background: #202e28;
+  border: 1px solid #465c43;
+  border-radius: 14px;
+  padding: 19px;
+  margin-top: 18px;
+}
+.harvest-map h3,
+.traffic-garage h3 {
+  font-size: 18px;
+  color: #e0e9c6;
+}
+.harvest-map p,
+.traffic-garage p {
+  color: #becab1;
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 7px 0 14px;
+}
+.harvest-levels {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 7px;
+}
+.harvest-levels button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 56px;
+  border: 1px solid #5c7650;
+  border-radius: 9px;
+  background: #354932;
+  color: #e4eccb;
+  cursor: pointer;
+  gap: 3px;
+}
+.harvest-levels strong {
+  font-size: 17px;
+}
+.harvest-levels small {
+  font-size: 9px;
+  color: #e3d99e;
+}
+.harvest-levels button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.harvest-levels [aria-current] {
+  border-color: #d1e99c;
+  background: #536b3e;
+}
+.harvest-demo {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  justify-content: center;
+  margin: 25px 0;
+  color: #f39d99;
+}
+.harvest-demo span {
+  display: grid;
+  place-items: center;
+  width: 41px;
+  height: 43px;
+  background: #3b5134;
+  border: 1px solid #657a4c;
+  border-radius: 8px;
+  font-size: 28px;
+}
+.harvest-demo strong {
+  font-size: 12px;
+  color: #d9e9af;
+}
+.harvest-demo b {
+  color: #d1ddb5;
+}
+.traffic-wrap {
+  width: min(100%, 410px);
+  aspect-ratio: 5/6;
+}
+.moto-wrap {
+  width: min(100%, 640px);
+  aspect-ratio: 32/21;
+}
+.traffic-wrap canvas,
+.moto-wrap canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.traffic-instruments {
+  width: min(100%, 410px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: #d4ddbf;
+  margin-bottom: 11px;
+  flex-wrap: wrap;
+}
+.traffic-instruments label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.traffic-instruments meter {
+  width: 65px;
+  height: 12px;
+  accent-color: #bcd98e;
+}
+.drive-status {
+  margin: 12px 0 0;
+  max-width: 560px;
+  text-align: center;
+  color: #bac9b0;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.traffic-pad,
+.moto-pad {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 450px;
+}
+.traffic-pad button,
+.moto-pad button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 73px;
+  min-width: 0;
+  border: 1px solid #4d6657;
+  border-radius: 12px;
+  color: #dbe8c3;
+  background: #283d32;
+  font: inherit;
+  font-size: 24px;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.traffic-pad small,
+.moto-pad small {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+}
+.traffic-pad .pressed,
+.moto-pad .pressed {
+  color: #203420;
+  background: #c7e69b;
+  border-color: #d7f0b4;
+}
+.traffic-pad button[data-drive="boost"] {
+  background: #284c50;
+  border-color: #598183;
+}
+.traffic-pad button[data-drive="boost"].pressed {
+  background: #afe1d7;
+  color: #1e383a;
+}
+.garage-cars {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.garage-cars button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  padding: 16px 6px;
+  border: 1px solid #55705c;
+  background: #2d4135;
+  color: #e2ead0;
+  border-radius: 11px;
+  cursor: pointer;
+}
+.garage-cars button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.garage-cars [aria-pressed="true"] {
+  border-color: #c7e69b;
+  background: #475b36;
+}
+.garage-cars strong {
+  font-size: 12px;
+}
+.garage-cars small,
+.traffic-garage > small {
+  font-size: 10px;
+  color: #c6d0b6;
+  line-height: 1.7;
+}
+.traffic-garage > small {
+  display: block;
+  margin-top: 13px;
+}
+.garage-car {
+  width: 29px;
+  height: 52px;
+  border-radius: 8px;
+  background: var(--car);
+  border: 3px solid #536259;
+  position: relative;
+  box-shadow:
+    -4px 0 #192a27,
+    4px 0 #192a27;
+}
+.garage-car:after {
+  content: "";
+  position: absolute;
+  inset: 13px 3px;
+  border-radius: 4px;
+  background: #38555b;
+  border-top: 5px solid #99c1bf;
+}
+.moto-progress {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11px;
+  color: #c8d7b5;
+  margin-bottom: 12px;
+}
+.moto-progress progress {
+  width: 45%;
+  height: 8px;
+  accent-color: #b9d98e;
+}
+.race-result {
+  margin-top: 14px;
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #6a8350;
+  border-radius: 13px;
+  background: #293b28;
+  text-align: center;
+}
+.race-result h2 {
+  font-size: 23px;
+  line-height: 1.3;
+  color: #e4edcf;
+}
+.race-result p {
+  font-size: 12px;
+  line-height: 1.8;
+  margin: 9px 0 16px;
+  color: #c2ceb2;
+}
+.result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  justify-content: center;
+}
+.result-actions .button {
+  font-size: 12px;
+  padding: 11px 15px;
+}
+@media (max-width: 540px) {
+  .harvest-board {
+    gap: 4px;
+    padding: 6px;
+    border-radius: 12px;
+  }
+  .crop-cell {
+    border-radius: 7px;
+    padding: 0;
+  }
+  .crop-special {
+    font-size: 13px;
+    min-width: 15px;
+    line-height: 16px;
+  }
+  .harvest-goals {
+    gap: 6px;
+  }
+  .harvest-goal {
+    padding: 5px 7px;
+    gap: 4px;
+    font-size: 13px;
+  }
+  .harvest-goal svg {
+    width: 25px;
+    height: 25px;
+  }
+  .harvest-goal small {
+    font-size: 10px;
+  }
+  .harvest-tip,
+  .drive-status {
+    font-size: 11px;
+  }
+  .harvest-map,
+  .traffic-garage {
+    padding: 12px;
+  }
+  .harvest-levels {
+    gap: 5px;
+  }
+  .harvest-levels button {
+    min-height: 47px;
+  }
+  .traffic-pad,
+  .moto-pad {
+    gap: 6px;
+  }
+  .traffic-pad button,
+  .moto-pad button {
+    min-height: 66px;
+    font-size: 22px;
+    border-radius: 9px;
+  }
+  .traffic-pad small,
+  .moto-pad small {
+    font-size: 8px;
+    letter-spacing: 0;
+  }
+  .garage-cars {
+    gap: 6px;
+  }
+  .garage-cars strong {
+    font-size: 10px;
+  }
+  .traffic-instruments {
+    font-size: 10px;
+  }
+  .race-result {
+    padding: 16px;
+  }
+  .race-result h2 {
+    font-size: 19px;
+  }
+}
+.journey-options {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.journey-options label {
+  min-width: 0;
+}
+.journey-options select {
+  min-width: 0;
+}
+.harvest-board {
+  margin: auto;
+}
+.traffic-instruments {
+  margin: 0 auto 11px;
+}
+.moto-stage {
+  max-width: 640px;
+}
+.drive-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+@media (max-width: 540px) {
+  .journey-options label {
+    flex: 1 1 220px;
+  }
+  .drive-actions .button {
+    font-size: 12px;
+    padding: 10px 13px;
+  }
+}

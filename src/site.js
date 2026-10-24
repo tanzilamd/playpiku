@@ -1,10 +1,10 @@
 export const SITE_PATH = "/playpiku/";
 export const SITE_URL = "https://tanzilahmed.tech/playpiku/";
-export const SHARE_VERSION = "v2";
+export const SHARE_VERSION = "v3";
 export function gamePath(id) {
   return `${SITE_PATH}play/${encodeURIComponent(id)}/`;
 }
-export function socialMetadata(game = null, count = 14) {
+export function socialMetadata(game = null, count = 17) {
   const url = game ? new URL(`play/${game.id}/`, SITE_URL).href : SITE_URL;
   return {
     url,

@@ -7,7 +7,7 @@ const escape = (s) =>
         c
       ],
   );
-export function renderPage(template, game = null, count = 14) {
+export function renderPage(template, game = null, count = 17) {
   const meta = socialMetadata(game, count);
   let html = template.replace(
     /<title>[\s\S]*?<\/title>/,

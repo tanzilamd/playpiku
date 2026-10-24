@@ -54,12 +54,24 @@ export function clearRecords() {
     "stack-classic",
     "defense-meadow",
     "defense-river",
+    "traffic-endless",
+    "traffic-challenge",
+    ...Array.from({ length: 24 }, (_, i) => `harvest-${i + 1}`),
+    ...Array.from({ length: 12 }, (_, i) => `moto-trail-${i + 1}`),
     ...["meadow", "sunset", "harbor"].flatMap((track) =>
       ["relaxed", "classic"].map((mode) => `rally-${track}-${mode}`),
     ),
   ];
   for (const id of ids) {
     memory.delete("best:" + id);
+    if (id.startsWith("moto-")) {
+      memory.delete("moto-ghost:" + id.slice(5));
+      try {
+        localStorage.removeItem(prefix + "moto-ghost:" + id.slice(5));
+      } catch {
+        unavailable = true;
+      }
+    }
     try {
       localStorage.removeItem(prefix + "best:" + id);
     } catch {

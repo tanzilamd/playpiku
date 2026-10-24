@@ -1,6 +1,17 @@
+import { cropSVG } from "./crops.js";
 const svg = (body) =>
   `<svg viewBox="0 0 400 240" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${body}</svg>`;
 export const art = {
+  harvest: svg(
+    `<g transform="translate(77 19) rotate(-6 124 103)"><rect width="247" height="205" rx="18" fill="#38563c"/>${Array.from({ length: 12 }, (_, i) => `<g transform="translate(${10 + (i % 4) * 59},${10 + Math.floor(i / 4) * 62})"><rect width="51" height="54" rx="9" fill="${i < 3 ? "#6c8346" : "#4a6845"}"/>${cropSVG(i < 3 ? 0 : i % 5).replace("<svg ", '<svg width="49" height="50" y="2" x="1" ')}</g>`).join("")}</g><path d="m45 62 4 10 10 4-10 4-4 10-4-10-10-4 10-4" fill="#e5edb2"/>`,
+  ),
+  traffic: svg(
+    `<path d="m128 0 145 0 73 240H54Z" fill="#d8c7a5"/><path d="m135 0 131 0 68 240H66Z" fill="#46535a"/><path d="m177 0-14 240m59-240 17 240" stroke="#eee7c5" stroke-width="3" stroke-dasharray="15 18"/><g transform="translate(179 133) rotate(-4 24 39)"><rect x="-5" y="10" width="58" height="57" rx="6" fill="#243837"/><rect width="48" height="80" rx="12" fill="#cbe39d"/><rect x="8" y="22" width="32" height="32" rx="7" fill="#36555a"/><path d="M7 8h9m16 0h9" stroke="#fff0bc" stroke-width="5"/></g><g transform="translate(247 48) scale(.72)"><rect x="-5" y="10" width="58" height="57" rx="6" fill="#243837"/><rect width="48" height="80" rx="12" fill="#e8b297"/><rect x="8" y="22" width="32" height="32" rx="7" fill="#36555a"/></g><g fill="#f5dd91" stroke="#a98b4d" stroke-width="2"><ellipse cx="140" cy="96" rx="9" ry="12"/><ellipse cx="145" cy="58" rx="7" ry="9"/></g>`,
+  ),
+  moto: svg(
+    `<circle cx="329" cy="48" r="24" fill="#f5e4af"/><path d="M0 155Q50 50 108 142Q174 52 245 143Q320 49 400 124V240H0Z" fill="#8fa99a"/><path d="M0 222Q68 119 151 182T281 161T400 165V240H0Z" fill="#547b58"/><path d="M0 222Q68 119 151 182T281 161T400 165" stroke="#d4ddb1" stroke-width="7"/><g transform="translate(204 125) rotate(-15)"><g fill="#2b4349" stroke="#d7e4cc" stroke-width="5"><circle cx="-35" cy="21" r="22"/><circle cx="39" cy="21" r="22"/></g><path d="M-35 21-14-12 15 21h-50m21-33h42l11 33m-11-33-5-17h-12" stroke="#d5ec9f" stroke-width="8" stroke-linejoin="round"/><path d="m-7-19 10-25 22 17m-32 8 15 25-10 11" stroke="#365d75" stroke-width="12" stroke-linecap="round"/><circle cx="9" cy="-62" r="15" fill="#f2c4a1"/><path d="M-6-64a15 15 0 0 1 30 0h-30" fill="#eeb87f"/><path d="M19-64h13" stroke="#eeb87f" stroke-width="5"/></g>`,
+  ),
+
   rally: svg(
     `<path d="M108 57h184q60 0 60 63t-60 63H108q-60 0-60-63t60-63Z" stroke="#d9d9bd" stroke-width="56"/><path d="M108 57h184q60 0 60 63t-60 63H108q-60 0-60-63t60-63Z" stroke="#465159" stroke-width="47"/><path d="M108 57h184q60 0 60 63t-60 63H108q-60 0-60-63t60-63Z" stroke="#e1dfb7" stroke-width="2" stroke-dasharray="9 12"/><g transform="translate(245 33) rotate(8 31 21)"><rect x="7" y="-4" width="12" height="50" rx="3" fill="#263733"/><rect x="43" y="-4" width="12" height="50" rx="3" fill="#263733"/><rect width="63" height="42" rx="12" fill="#f1cb7e"/><rect x="21" y="6" width="23" height="30" rx="6" fill="#37626b"/><path d="M52 9v7m0 11v6" stroke="#fff1c6" stroke-width="5"/></g><path d="m159 101 4 11 11 4-11 4-4 11-4-11-11-4 11-4" fill="#b8d496"/>`,
   ),
