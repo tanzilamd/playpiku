@@ -78,3 +78,9 @@ All navigation and button-based games support keyboard interaction. The rules ex
 - `scripts/`: local server and static build
 - `tests/`: rule and browser interaction tests
 - `.github/workflows/pages.yml`: validation and GitHub Pages deployment
+
+## Link previews
+
+The initial HTML includes Open Graph and Twitter metadata for crawlers that do not run JavaScript. `assets/playpiku-share-v1.png` is a 1200 × 630 PNG and is included in `dist/`. All hash-based game links share the arcade preview because URL fragments are not sent to preview crawlers.
+
+Regenerate the branded card with `node scripts/generate-share-card.js` after installing development dependencies and Chromium. The script uses local SVG art and no external images or fonts. Update the versioned image URL in `index.html` if the card changes so social platforms can fetch the new asset. Platforms may retain older previews until their cached scrape refreshes.

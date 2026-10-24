@@ -7,6 +7,7 @@ const mime = {
   ".css": "text/css",
   ".js": "text/javascript",
   ".svg": "image/svg+xml",
+  ".png": "image/png",
   ".json": "application/json",
 };
 http
@@ -25,10 +26,12 @@ http
       }
       if ((await stat(file)).isDirectory()) file = resolve(file, "index.html");
       const body = await readFile(file);
+      const contentType = mime[extname(file)] || "application/octet-stream";
+      const binary =
+        contentType === "image/png" ||
+        contentType === "application/octet-stream";
       res.writeHead(200, {
-        "Content-Type":
-          (mime[extname(file)] || "application/octet-stream") +
-          "; charset=utf-8",
+        "Content-Type": contentType + (binary ? "" : "; charset=utf-8"),
       });
       res.end(body);
     } catch {
