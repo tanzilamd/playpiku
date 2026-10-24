@@ -4,6 +4,8 @@ A little play. A better day. Six original browser games with an English interfac
 
 **Games:** 2048, Memory Match, Snake, Reaction Test, Tic Tac Toe, and Brick Breaker.
 
+**Production:** [PlayPiku](https://tanzilahmed.tech/playpiku/) · [Deployment workflow](https://github.com/tanzilamd/playpiku/actions/workflows/pages.yml)
+
 Built with HTML, CSS, and JavaScript modules. No runtime dependencies, remote fonts, game embeds, accounts, advertisements, or analytics. Developed by [Tanzil](https://tanzilahmed.tech/).
 
 ## Local development
@@ -36,7 +38,8 @@ To check the built output, run `SERVE_DIR=dist npm run dev`. Route URLs use hash
 1. Push this checkout to `tanzilamd/playpiku` on `main`.
 2. In the repository, open **Settings → Pages → Build and deployment → Source** and select **GitHub Actions**.
 3. The **Test and deploy PlayPiku** workflow tests, builds, and publishes `dist/`. If the first run happened before enabling Pages, rerun it from **Actions**, or use **Run workflow**.
-4. GitHub reports the live address in the deployment. The expected project-site address is `https://tanzilamd.github.io/playpiku/`; it is not live until deployment succeeds.
+4. GitHub reports the live address in the deployment. This project currently inherits the account site’s custom domain, so its production address is `https://tanzilahmed.tech/playpiku/`. The default `tanzilamd.github.io` address may redirect to that domain. Do not add or change a project `CNAME` to override the account domain unless explicitly requested.
+5. In Pages settings, enable **Enforce HTTPS** when available. The custom domain’s certificate is approved, but HTTPS enforcement is a separate setting requiring repository administration access.
 
 GitHub Pages must be available for the repository's visibility and account plan. No paid domain is needed. The browser games need no backend, so there is no server sleep behavior.
 
