@@ -33,6 +33,14 @@ node --input-type=module -e 'import { chromium } from "@playwright/test"; consol
 
 To check the built output, run `SERVE_DIR=dist npm run dev`. Route URLs use hashes, so direct links and reloads work on GitHub Pages without a custom 404 page.
 
+To run the same desktop/mobile interaction checks against the deployed site:
+
+```sh
+PLAYPIKU_BASE_URL=https://tanzilahmed.tech/playpiku/ npm run test:e2e
+```
+
+Live mode skips the local server and uses `HTTPS_PROXY` when configured. Keep TLS verification enabled and ensure Chromium can access its certificate trust database. Tests use fresh browser contexts and change only their own browser storage; they do not change server data.
+
 ## Publish with GitHub Pages
 
 1. Push this checkout to `tanzilamd/playpiku` on `main`.
