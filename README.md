@@ -1,8 +1,8 @@
 # PlayPiku
 
-A little play. A better day. Six original browser games with an English interface, responsive layouts, first-visit tutorials, keyboard and touch controls, and local personal records.
+A little play. A better day. Nine original browser games with an English interface, responsive layouts, first-visit tutorials, keyboard and touch controls, and local personal records.
 
-**Games:** 2048, Memory Match, Snake, Reaction Test, Tic Tac Toe, and Brick Breaker.
+**Games:** Block Puzzle, Minesweeper, Piku Dash, 2048, Memory Match, Snake, Reaction Test, Tic Tac Toe, and Brick Breaker.
 
 **Production:** [PlayPiku](https://tanzilahmed.tech/playpiku/) · [Deployment workflow](https://github.com/tanzilamd/playpiku/actions/workflows/pages.yml)
 
@@ -53,20 +53,23 @@ GitHub Pages must be available for the repository's visibility and account plan.
 
 ## What stays on the device
 
-Best scores, settings, first-visit guide preferences, and the current 2048 board use namespaced `localStorage`. They do not sync across devices. If storage is blocked, games still work and state lasts only for the current visit. Reset records in Settings clears best scores; clearing browser site data clears everything.
+Best scores, settings, first-visit guide preferences, and the current 2048 and Block Puzzle boards use namespaced `localStorage`. They do not sync across devices. If storage is blocked, games still work and state lasts only for the current visit. Reset records in Settings clears best scores; clearing browser site data clears everything.
 
 Memory has three board sizes and separate best move counts. Snake has three speeds and separate best scores. Reaction Test records the best five-round average in milliseconds; device/input latency affects results. Tic Tac Toe supports two players on one device or easy/hard computer opponents, with a session-only match tally. Brick Breaker has three levels and three lives.
 
+Block Puzzle supports tap-to-place, drag-and-drop, and keyboard placement on an 8 × 8 board, simultaneous row/column clears, consecutive-clear combos, and automatic board restoration. Minesweeper has three board sizes, a safe first reveal (including its neighbors), mobile Flag mode, right-click/F flags, number chording, and per-difficulty best times. Random Minesweeper boards can require a guess. Piku Dash has double jumps, collectible stars, forgiving hitboxes, and capped, gradually increasing speed.
+
 ## Accessibility and controls
 
-All navigation and button-based games support keyboard interaction. The rules explain keyboard and touch controls per game. Timed/action games pause when hidden or when a help/settings dialog opens; they resume only when requested. Motion follows the operating system preference and can also be reduced in Settings. Sound is optional and off by default. Canvas-based Snake and Brick Breaker expose controls and score/status text but do not provide a fully equivalent nonvisual gameplay mode.
+All navigation and button-based games support keyboard interaction. The rules explain keyboard and touch controls per game. Timed/action games pause when hidden or when a help/settings dialog opens; they resume only when requested. Motion follows the operating system preference and can also be reduced in Settings. Sound is optional and off by default. Canvas-based Snake, Brick Breaker, and Piku Dash expose controls and score/status text but do not provide a fully equivalent nonvisual gameplay mode.
 
 ## Project structure
 
 - `src/app.js`: routes, library, dialogs, preferences
 - `src/catalog.js`: English game descriptions and tutorials
 - `src/art.js`: original inline SVG game illustrations
-- `src/rules.js`: independently tested game rules
+- `src/rules.js`: independently tested original game rules
+- `src/engines/`: Block Puzzle, Minesweeper, and Piku Dash rules and physics
 - `src/games/`: game controllers with cleanup on navigation
 - `scripts/`: local server and static build
 - `tests/`: rule and browser interaction tests

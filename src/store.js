@@ -42,6 +42,11 @@ export function clearRecords() {
     "reaction",
     "2048",
     "breaker",
+    "blocks",
+    "dash",
+    "mines-easy",
+    "mines-normal",
+    "mines-hard",
   ];
   for (const id of ids) {
     memory.delete("best:" + id);
