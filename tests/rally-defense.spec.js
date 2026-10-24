@@ -120,9 +120,18 @@ test("Tower Defense keyboard navigation and terminal defeat leave a usable resta
   page,
 }) => {
   test.setTimeout(90000);
-  await open(page, "defense");
+  await page.goto("./play/defense/");
+  await expect(page.locator("#help-done")).toBeVisible();
+  // A player can focus a cell before the queued dialog close event runs.
+  await page.evaluate(async () => {
+    document.querySelector("#help-done").click();
+    document.querySelector('[data-defense-cell="0"]').focus();
+    await new Promise((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(resolve)),
+    );
+  });
+  await expect(page.locator('[data-defense-cell="0"]')).toBeFocused();
   await page.clock.install();
-  await page.locator('[data-defense-cell="0"]').focus();
   await page.keyboard.press("ArrowRight");
   await page.keyboard.press("ArrowDown");
   await page.keyboard.press("Enter");

@@ -46,9 +46,19 @@ dialog.addEventListener("click", (e) => {
   }
 });
 function help(game, first = false) {
+  const previousFocus = document.activeElement;
   openModal(
     `<div class="modal-heading"><span class="eyebrow">A QUICK WALKTHROUGH</span><button class="icon-button" data-close aria-label="Close help">×</button></div><h2 id="modal-title">${game.name}, made simple.</h2><p>${game.goal}</p>${game.demo}<ol class="help-steps">${game.steps.map((s, i) => `<li><span>${i + 1}</span><p>${s}</p></li>`).join("")}</ol><div class="tip"><span aria-hidden="true">✦</span><p>${game.tip}</p></div><button class="button primary full" id="help-done">${first ? "Got it. Let’s play!" : "Back to the game"} <span aria-hidden="true">→</span></button>`,
     () => {
+      // The dialog's close event is queued. Keep any focus the player has
+      // already moved into the game before that event arrives.
+      const focused = document.activeElement;
+      if (
+        focused !== previousFocus &&
+        focused !== document.body &&
+        !dialog.contains(focused)
+      )
+        return;
       const target =
         document.querySelector("#game-start:not(:disabled)") ||
         document.querySelector("#game-board button") ||
