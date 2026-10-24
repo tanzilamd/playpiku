@@ -11,13 +11,13 @@ test("library filters, project-base assets, footer and mobile layout", async ({
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("./");
-  await expect(page.locator(".game-card")).toHaveCount(9);
+  await expect(page.locator(".game-card")).toHaveCount(12);
   await page.getByRole("button", { name: "Arcade", exact: true }).click();
-  await expect(page.locator(".game-card")).toHaveCount(3);
+  await expect(page.locator(".game-card")).toHaveCount(5);
   await page.getByRole("button", { name: "Quick play", exact: true }).click();
   await expect(page.locator(".game-card")).toHaveCount(1);
   await page.getByRole("button", { name: "All games", exact: true }).click();
-  await expect(page.locator(".game-card")).toHaveCount(9);
+  await expect(page.locator(".game-card")).toHaveCount(12);
   await expect(
     page.getByRole("link", { name: "Tanzil", exact: false }),
   ).toHaveAttribute("href", "https://tanzilahmed.tech/");
@@ -170,6 +170,9 @@ test("settings persist and all routes load without page errors or horizontal ove
   await page.reload();
   await expect(page.locator("html")).toHaveClass("reduce-motion");
   for (const id of [
+    "golf",
+    "words",
+    "stack",
     "blocks",
     "mines",
     "dash",

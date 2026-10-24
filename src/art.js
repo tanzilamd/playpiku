@@ -1,6 +1,23 @@
 const svg = (body) =>
   `<svg viewBox="0 0 400 240" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${body}</svg>`;
 export const art = {
+  golf: svg(
+    `<g transform="translate(77 22) rotate(-8 122 94)"><rect width="246" height="188" rx="18" fill="#295b48"/><rect x="10" y="10" width="226" height="168" rx="11" stroke="#acd08c" stroke-width="3"/><path d="M139 56v80" stroke="#173d35" stroke-width="15" stroke-linecap="round"/><path d="m55 139 46-100 94 0" stroke="#d5ebac" stroke-width="3" stroke-linecap="round" stroke-dasharray="3 10"/><circle cx="55" cy="139" r="9" fill="#fff4d9"/><circle cx="195" cy="41" r="11" fill="#142f29"/><path d="M195 41V5l25 9-25 8" stroke="#f2be9a" stroke-width="3" stroke-linejoin="round"/></g><path d="m351 167 3 9 9 3-9 3-3 9-3-9-9-3 9-3" fill="#436f58"/>`,
+  ),
+  words: svg(
+    `<g transform="translate(105 23) rotate(7 96 96)"><rect width="190" height="195" rx="14" fill="#a39d7f"/>${"RIVERPLANTKOALAMOONSCLOUD"
+      .split("")
+      .map(
+        (letter, i) =>
+          `<rect x="${8 + (i % 5) * 35}" y="${10 + Math.floor(i / 5) * 36}" width="30" height="31" rx="5" fill="${i < 5 ? "#b9d292" : "#f3edd9"}"/><text x="${23 + (i % 5) * 35}" y="${32 + Math.floor(i / 5) * 36}" text-anchor="middle" font-family="Arial,sans-serif" font-weight="800" font-size="19" fill="#425345">${letter}</text>`,
+      )
+      .join(
+        "",
+      )}</g><path d="m63 67 3 9 9 3-9 3-3 9-3-9-9-3 9-3" fill="#87946c"/>`,
+  ),
+  stack: svg(
+    `<path d="M0 215q75-97 150 0 100-108 250 0" fill="#858baa"/><g>${[180, 180, 162, 150, 131, 118].map((w, i) => `<rect x="${200 - w / 2}" y="${192 - i * 25}" width="${w}" height="23" rx="4" fill="${["#ddd5ec", "#c2b3df", "#b4bfe1", "#b2d2cd", "#d2dcae", "#efd7a5"][i]}"/><path d="M${203 - w / 2} ${195 - i * 25}h${w - 6}" stroke="#fff6" stroke-width="3"/>`).join("")}</g><rect x="226" y="22" width="118" height="23" rx="4" fill="#efd7a5"/><path d="m67 64 4 11 11 4-11 4-4 11-4-11-11-4 11-4" fill="#676c93"/>`,
+  ),
   blocks: svg(
     `<g transform="translate(100 22) rotate(-7 100 100)"><rect width="200" height="200" rx="16" fill="#284f4c"/>${Array.from({ length: 36 }, (_, i) => `<rect x="${10 + (i % 6) * 30}" y="${10 + Math.floor(i / 6) * 30}" width="25" height="25" rx="5" fill="${[0, 1, 6, 12, 13, 14, 20, 26, 27, 28, 32, 33, 34, 35].includes(i) ? "#d3ee9a" : [4, 5, 10, 11, 17, 23].includes(i) ? "#f2c080" : "#37645d"}"/>`).join("")}</g><path d="m331 57 4 11 11 4-11 4-4 11-4-11-11-4 11-4" fill="#38665d"/>`,
   ),

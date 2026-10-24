@@ -65,10 +65,19 @@ function bestLabel(game) {
       : game.id === "snake"
         ? "snake-normal"
         : game.id;
-  const best = get("best:" + (game.id === "mines" ? "mines-easy" : key));
+  const best = get(
+    "best:" +
+      (game.id === "mines"
+        ? "mines-easy"
+        : game.id === "words"
+          ? "words-easy"
+          : game.id === "stack"
+            ? "stack-relaxed"
+            : key),
+  );
   if (game.id === "tictactoe") return "Solo or with a friend";
   if (best === null) return "A fresh challenge awaits";
-  return `Your best: ${best}${game.id === "reaction" ? " ms" : game.id === "memory" ? " moves · Easy" : game.id === "mines" ? " sec · Easy" : " pts"}`;
+  return `Your best: ${best}${game.id === "reaction" ? " ms" : game.id === "memory" ? " moves · Easy" : game.id === "mines" || game.id === "words" ? " sec · Easy" : game.id === "golf" ? " shots" : game.id === "stack" ? " floors · Relaxed" : " pts"}`;
 }
 function cards() {
   return games
@@ -83,7 +92,7 @@ function home() {
   document.title = "PlayPiku — A little play goes a long way";
   const recent = get("recent");
   const recentGame = games.find((g) => g.id === recent);
-  main.innerHTML = `<section class="hero"><div class="hero-copy"><div class="hero-badge"><span class="status-dot"></span> YOUR FIVE-MINUTE HAPPY PLACE</div><h1>A little play.<br>A <span>better day.</span><svg viewBox="0 0 390 18" aria-hidden="true"><path d="M4 12Q170-3 384 8"/></svg></h1><p>Big on fun. Light on everything else.<br>Pick a game, find your flow, and make a little time for play.</p><a href="#games" class="button primary" id="explore-games">Find your next favorite <span class="down-arrow">${arrow}</span></a><div class="hero-notes"><span>✓ No downloads</span><span>✓ No sign-ups</span><span>✓ Just play</span></div></div><a class="hero-feature" href="#/play/dash" aria-label="Play featured game Piku Dash"><div class="feature-top"><span><i></i> NEW IN THE ARCADE</span><span class="feature-star" aria-hidden="true">✳</span></div><div class="feature-art">${art.dash}</div><div class="feature-bottom"><div><span class="eyebrow">SMALL JUMPS. BIG LITTLE ADVENTURES.</span><strong>Say hello to Piku Dash.</strong></div><span class="feature-button" aria-hidden="true">${arrow}</span></div><span class="floating-label">Just one more jump…</span></a></section>
+  main.innerHTML = `<section class="hero"><div class="hero-copy"><div class="hero-badge"><span class="status-dot"></span> YOUR FIVE-MINUTE HAPPY PLACE</div><h1>A little play.<br>A <span>better day.</span><svg viewBox="0 0 390 18" aria-hidden="true"><path d="M4 12Q170-3 384 8"/></svg></h1><p>Big on fun. Light on everything else.<br>Pick a game, find your flow, and make a little time for play.</p><a href="#games" class="button primary" id="explore-games">Find your next favorite <span class="down-arrow">${arrow}</span></a><div class="hero-notes"><span>✓ No downloads</span><span>✓ No sign-ups</span><span>✓ Just play</span></div></div><a class="hero-feature" href="#/play/golf" aria-label="Play featured game Mini Golf"><div class="feature-top"><span><i></i> NEW IN THE ARCADE</span><span class="feature-star" aria-hidden="true">✳</span></div><div class="feature-art">${art.golf}</div><div class="feature-bottom"><div><span class="eyebrow">SIX LITTLE HOLES. ONE LOVELY BREAK.</span><strong>A little swing. A big smile.</strong></div><span class="feature-button" aria-hidden="true">${arrow}</span></div><span class="floating-label">Just one more putt…</span></a></section>
   <section class="library" id="games" aria-labelledby="library-title"><div class="section-heading"><div><span class="eyebrow">GOOD TIMES, ZERO INSTALLS</span><h2 id="library-title">Your next little escape<span>.</span></h2></div><span class="game-count">${games.length} games. Endless “one more.”</span></div><div class="library-toolbar"><div class="filters" role="group" aria-label="Filter games">${["All games", "Puzzle", "Arcade", "Quick play"].map((c) => `<button data-filter="${c}" class="filter ${category === c ? "selected" : ""}" aria-pressed="${category === c}">${c}</button>`).join("")}</div><span class="library-note"><span aria-hidden="true">✦</span> A good break starts here</span></div><div class="game-grid" id="game-grid">${cards()}</div><p class="sr-only" id="filter-status" role="status"></p></section>
   ${recentGame ? `<a class="resume-banner" href="#/play/${recentGame.id}"><span class="resume-icon" aria-hidden="true">↶</span><div><span class="eyebrow">BACK FOR ANOTHER ROUND?</span><h3>Pick up with ${recentGame.name}.</h3><p>Your next personal best could be one game away.</p></div><span class="button secondary">Let’s play ${arrow}</span></a>` : ""}
   <section class="break-note"><div class="mini-spark" aria-hidden="true">✳</div><div><h2>Less scrolling. More playing.</h2><p>A tiny corner of the internet for a well-earned break.<br>No accounts, no noise. Just you and your next high score.</p></div><span class="note-doodle" aria-hidden="true">☺</span></section>`;
@@ -193,7 +202,7 @@ document.querySelector("#settings-button").onclick = () => {
       e.target.dataset.confirm = "yes";
       e.target.textContent = "Confirm reset";
       document.querySelector("#settings-status").textContent =
-        "Press Confirm reset to clear all best scores. Saved 2048 and Block Puzzle games are kept.";
+        "Press Confirm reset to clear all best scores. Saved 2048, Block Puzzle, and Mini Golf games are kept.";
       return;
     }
     clearRecords();

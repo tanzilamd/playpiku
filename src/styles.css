@@ -2669,3 +2669,338 @@ dialog > .button {
   font-size: 12px;
   line-height: 1.5;
 }
+/* A new round of little escapes */
+.art-fairway {
+  background: #94b8a3;
+}
+.art-paper {
+  background: #d8d1af;
+}
+.art-lavender {
+  background: #a5a6cb;
+}
+.course-name {
+  color: #c0d4ac;
+  text-align: center;
+  font-size: 12px;
+  margin-bottom: 13px;
+}
+.golf-wrap {
+  border-color: #57725c;
+  touch-action: none;
+}
+.golf-wrap canvas {
+  min-height: 220px;
+}
+.golf-scorecard {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 7px;
+  margin: 15px auto 0;
+  max-width: 420px;
+}
+.golf-hole-chip {
+  border: 1px solid #3e5141;
+  border-radius: 8px;
+  background: #25362b;
+  text-align: center;
+  padding: 5px;
+}
+.golf-hole-chip span {
+  display: block;
+  color: #a7b8a0;
+  font-size: 9px;
+}
+.golf-hole-chip strong {
+  display: block;
+  font-size: 14px;
+  color: #a5ad9c;
+}
+.golf-hole-chip.current {
+  border-color: #c7ef8f;
+}
+.golf-hole-chip.finished strong {
+  color: var(--lime);
+}
+.golf-sliders {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  width: 100%;
+  padding: 0 8px 3px;
+}
+.golf-sliders label {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  font-size: 11px;
+  color: var(--muted);
+  gap: 6px;
+}
+.golf-sliders output {
+  color: #dfedc2;
+  font-size: 11px;
+}
+.golf-sliders input {
+  grid-column: 1/-1;
+  width: 100%;
+  margin: 5px 0;
+  min-height: 28px;
+  accent-color: var(--lime);
+  cursor: pointer;
+}
+.golf-wrap .board-overlay,
+.stack-wrap .board-overlay {
+  padding: 15px;
+  gap: 11px;
+}
+.golf-wrap .board-overlay h2,
+.stack-wrap .board-overlay h2 {
+  font-size: 23px;
+}
+.golf-wrap .board-overlay p {
+  font-size: 12px;
+  line-height: 1.6;
+}
+.golf-demo {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+  margin: 23px 0;
+  font-size: 34px;
+  color: var(--lime);
+}
+.golf-demo > b {
+  font-size: 24px;
+  letter-spacing: 3px;
+  color: #a3bc8c;
+}
+.stack-wrap {
+  border-color: #555c79;
+  touch-action: manipulation;
+}
+.stack-demo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 22px 0;
+}
+.stack-demo > i {
+  display: block;
+  width: 140px;
+  height: 22px;
+  border-radius: 5px;
+  background: #ccb8e4;
+}
+.stack-demo > i:nth-child(2) {
+  width: 125px;
+  background: #b8d2cc;
+}
+.stack-demo > i:last-child {
+  width: 110px;
+  background: #e6c999;
+}
+.word-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 20px;
+}
+.word-options label {
+  gap: 9px;
+}
+.word-shell {
+  position: relative;
+}
+.word-grid {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 5px;
+  background: #30372c;
+  border: 1px solid #65714d;
+  border-radius: 14px;
+  padding: 9px;
+  touch-action: none;
+  user-select: none;
+}
+.letter-cell {
+  aspect-ratio: 1;
+  min-width: 0;
+  border: 1px solid #5c654f;
+  border-radius: 6px;
+  background: #424b39;
+  color: #f1eedc;
+  font-size: 22px;
+  font-weight: 750;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+.letter-cell:hover {
+  border-color: #d4e7a7;
+}
+.letter-cell.word-found {
+  background: #47673b;
+  color: #e0f6bd;
+  border-color: #91b66e;
+}
+.letter-cell.selecting {
+  background: #897342;
+  color: #fff2c9;
+  border-color: #f6d68a;
+  box-shadow: inset 0 0 0 1px #f6d68a;
+}
+.letter-cell.word-hint {
+  outline: 3px solid #d3b8ef;
+  outline-offset: -4px;
+}
+.word-selection {
+  text-align: center;
+  color: #c3d5a6;
+  font-size: 12px;
+  min-height: 24px;
+  margin: 12px 0;
+}
+.word-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+}
+.word-list li {
+  background: #292f25;
+  border: 1px solid #46503a;
+  border-radius: 7px;
+  padding: 7px 8px;
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  letter-spacing: 1px;
+  font-weight: 650;
+}
+.word-list li > span {
+  font-size: 11px;
+  color: #90a57a;
+}
+.word-list li.found {
+  color: #bcdfa2;
+  border-color: #6a8751;
+  text-decoration: line-through;
+}
+.word-list li.found > span {
+  font-size: 0;
+}
+.word-list li.found > span::after {
+  content: "✓";
+  font-size: 12px;
+  text-decoration: none;
+}
+.hint-note {
+  font-size: 10px;
+  text-align: center;
+  color: var(--muted);
+}
+.word-demo {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  margin: 24px 0;
+}
+.word-demo > span {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  background: #516f40;
+  color: #e7f3c9;
+  border: 1px solid #a1bb7a;
+  border-radius: 7px;
+  font-size: 21px;
+  font-weight: 800;
+}
+.word-shell .board-overlay h2 {
+  font-size: 23px;
+}
+@media (max-width: 540px) {
+  .golf-sliders {
+    gap: 15px;
+    padding: 0;
+  }
+  .golf-scorecard {
+    gap: 5px;
+  }
+  .golf-wrap .board-overlay h2,
+  .stack-wrap .board-overlay h2 {
+    font-size: 21px;
+  }
+  .golf-wrap .board-overlay .button,
+  .stack-wrap .board-overlay .button {
+    font-size: 12px;
+    min-height: 39px;
+    padding: 9px 14px;
+  }
+  .word-grid {
+    gap: 4px;
+    padding: 7px;
+  }
+  .letter-cell {
+    font-size: 18px;
+    border-radius: 5px;
+  }
+  .word-list {
+    gap: 6px;
+  }
+  .word-list li {
+    padding: 7px 5px;
+    font-size: 10px;
+    letter-spacing: 0.7px;
+    gap: 5px;
+  }
+  .word-selection {
+    font-size: 11px;
+  }
+  .word-options {
+    gap: 9px;
+  }
+  .word-options label {
+    font-size: 10px;
+  }
+  .word-options select {
+    font-size: 10px;
+    padding: 7px 8px;
+  }
+  .word-demo > span {
+    width: 34px;
+    height: 37px;
+    font-size: 19px;
+  }
+  .word-shell .board-overlay {
+    padding: 14px;
+    gap: 10px;
+  }
+  .word-shell .board-overlay h2 {
+    font-size: 22px;
+  }
+  .word-shell .board-overlay p {
+    font-size: 12px;
+  }
+}
+.skip-link {
+  top: 10px;
+  clip-path: inset(50%);
+}
+.skip-link:focus {
+  clip-path: none;
+}
+.game-stats {
+  flex: 1;
+  min-width: 0;
+  flex-wrap: wrap;
+  row-gap: 8px;
+}

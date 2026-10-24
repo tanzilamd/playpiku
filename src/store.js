@@ -47,6 +47,11 @@ export function clearRecords() {
     "mines-easy",
     "mines-normal",
     "mines-hard",
+    "golf",
+    "words-easy",
+    "words-classic",
+    "stack-relaxed",
+    "stack-classic",
   ];
   for (const id of ids) {
     memory.delete("best:" + id);
