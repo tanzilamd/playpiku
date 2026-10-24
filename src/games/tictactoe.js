@@ -1,16 +1,138 @@
-import { frame, listen } from './shared.js';
-import { winner, bestMove } from '../rules.js';
-export function mount(root,ctx) {
-  let board=Array(9).fill(''),turn='X',mode='hard',thinking=false,ended=false,wins={X:0,O:0,draw:0},timeout,round=0;
-  const events=listen();
-  const ui=frame(root,{stats:[['You · X',0,'x-wins'],['Draws',0,'draws'],['CPU · O',0,'o-wins']],options:'<label>Opponent <select id="opponent"><option value="hard">Computer · Hard</option><option value="easy">Computer · Easy</option><option value="friend">A friend · Same device</option></select></label>',body:'<p class="turn-indicator" id="turn" role="status">Your turn · X</p><div class="ttt-board" id="game-board" aria-label="Tic Tac Toe board"></div>',controls:'<button class="button primary" id="next-round">Next round →</button>',note:'Three in a row. The simplest things can be the most fun.'},ctx);
-  const area=ui.el('#game-board');ui.el('#next-round').hidden=true;
-  function draw(line=[]){area.innerHTML=board.map((v,i)=>`<button data-cell="${i}" class="ttt-cell ${v.toLowerCase()} ${line.includes(i)?'winning':''}" aria-label="Row ${Math.floor(i/3)+1}, column ${i%3+1}: ${v||'empty'}" ${v||ended||thinking?'disabled':''}>${v==='X'?'×':v==='O'?'○':''}</button>`).join('');}
-  function end(){const result=winner(board);if(!result)return false;ended=true;wins[result.player]++;ui.stat('x-wins',wins.X);ui.stat('o-wins',wins.O);ui.stat('draws',wins.draw);const message=result.player==='draw'?'A well-played draw.':mode==='friend'?`${result.player} takes the round!`:result.player==='X'?'You win. Nicely played!':'The computer takes this one.';ui.el('#turn').textContent=message;ui.say(message);ctx.sound(result.player==='X'?'win':'tap');draw(result.line);ui.el('#next-round').hidden=false;return true;}
-  function ai(){if(ended)return;thinking=true;ui.el('#turn').textContent='Computer is thinking…';draw();timeout=setTimeout(()=>{const empty=board.flatMap((v,i)=>v?[]:[i]);const choice=mode==='hard'?bestMove(board):empty[Math.floor(Math.random()*empty.length)];if(choice===null||choice===undefined)return;board[choice]='O';thinking=false;if(!end()){turn='X';ui.el('#turn').textContent='Your turn · X';draw();}},350);}
-  function restart(){clearTimeout(timeout);board=Array(9).fill('');thinking=false;ended=false;turn=round%2===1&&mode!=='friend'?'O':'X';draw();ui.el('#next-round').hidden=true;ui.el('#turn').textContent=mode==='friend'?`${turn}’s turn`:'Your turn · X';ui.say('New round.');if(turn==='O')ai();}
-  events.on(area,'click',e=>{const cell=e.target.closest('[data-cell]');if(!cell||thinking||ended)return;const i=Number(cell.dataset.cell);if(board[i])return;board[i]=turn;ctx.sound();if(end())return;turn=turn==='X'?'O':'X';if(mode!=='friend')ai();else{ui.el('#turn').textContent=`${turn}’s turn`;draw();}});
-  events.on(ui.el('#next-round'),'click',()=>{round++;restart();});
-  events.on(ui.el('#opponent'),'change',e=>{mode=e.target.value;wins={X:0,O:0,draw:0};round=0;ui.stat('x-wins',0);ui.stat('draws',0);ui.stat('o-wins',0);ui.el('#x-wins').previousElementSibling.textContent=mode==='friend'?'Player X':'You · X';ui.el('#o-wins').previousElementSibling.textContent=mode==='friend'?'Player O':'CPU · O';restart();});
-  restart();return {restart,isPlaying:()=>board.some(Boolean)&&!ended,destroy:()=>{clearTimeout(timeout);events.destroy();}};
+import { frame, listen } from "./shared.js";
+import { winner, bestMove } from "../rules.js";
+export function mount(root, ctx) {
+  let board = Array(9).fill(""),
+    turn = "X",
+    mode = "hard",
+    thinking = false,
+    ended = false,
+    wins = { X: 0, O: 0, draw: 0 },
+    timeout,
+    round = 0;
+  const events = listen();
+  const ui = frame(
+    root,
+    {
+      stats: [
+        ["You · X", 0, "x-wins"],
+        ["Draws", 0, "draws"],
+        ["CPU · O", 0, "o-wins"],
+      ],
+      options:
+        '<label>Opponent <select id="opponent"><option value="hard">Computer · Hard</option><option value="easy">Computer · Easy</option><option value="friend">A friend · Same device</option></select></label>',
+      body: '<p class="turn-indicator" id="turn" role="status">Your turn · X</p><div class="ttt-board" id="game-board" aria-label="Tic Tac Toe board"></div>',
+      controls:
+        '<button class="button primary" id="next-round">Next round →</button>',
+      note: "Three in a row. The simplest things can be the most fun.",
+    },
+    ctx,
+  );
+  const area = ui.el("#game-board");
+  ui.el("#next-round").hidden = true;
+  function draw(line = []) {
+    area.innerHTML = board
+      .map(
+        (v, i) =>
+          `<button data-cell="${i}" class="ttt-cell ${v.toLowerCase()} ${line.includes(i) ? "winning" : ""}" aria-label="Row ${Math.floor(i / 3) + 1}, column ${(i % 3) + 1}: ${v || "empty"}" ${v || ended || thinking ? "disabled" : ""}>${v === "X" ? "×" : v === "O" ? "○" : ""}</button>`,
+      )
+      .join("");
+  }
+  function end() {
+    const result = winner(board);
+    if (!result) return false;
+    ended = true;
+    wins[result.player]++;
+    ui.stat("x-wins", wins.X);
+    ui.stat("o-wins", wins.O);
+    ui.stat("draws", wins.draw);
+    const message =
+      result.player === "draw"
+        ? "A well-played draw."
+        : mode === "friend"
+          ? `${result.player} takes the round!`
+          : result.player === "X"
+            ? "You win. Nicely played!"
+            : "The computer takes this one.";
+    ui.el("#turn").textContent = message;
+    ui.say(message);
+    ctx.sound(result.player === "X" ? "win" : "tap");
+    draw(result.line);
+    ui.el("#next-round").hidden = false;
+    return true;
+  }
+  function ai() {
+    if (ended) return;
+    thinking = true;
+    ui.el("#turn").textContent = "Computer is thinking…";
+    draw();
+    timeout = setTimeout(() => {
+      const empty = board.flatMap((v, i) => (v ? [] : [i]));
+      const choice =
+        mode === "hard"
+          ? bestMove(board)
+          : empty[Math.floor(Math.random() * empty.length)];
+      if (choice === null || choice === undefined) return;
+      board[choice] = "O";
+      thinking = false;
+      if (!end()) {
+        turn = "X";
+        ui.el("#turn").textContent = "Your turn · X";
+        draw();
+      }
+    }, 350);
+  }
+  function restart() {
+    clearTimeout(timeout);
+    board = Array(9).fill("");
+    thinking = false;
+    ended = false;
+    turn = round % 2 === 1 && mode !== "friend" ? "O" : "X";
+    draw();
+    ui.el("#next-round").hidden = true;
+    ui.el("#turn").textContent =
+      mode === "friend" ? `${turn}’s turn` : "Your turn · X";
+    ui.say("New round.");
+    if (turn === "O") ai();
+  }
+  events.on(area, "click", (e) => {
+    const cell = e.target.closest("[data-cell]");
+    if (!cell || thinking || ended) return;
+    const i = Number(cell.dataset.cell);
+    if (board[i]) return;
+    board[i] = turn;
+    ctx.sound();
+    if (end()) return;
+    turn = turn === "X" ? "O" : "X";
+    if (mode !== "friend") ai();
+    else {
+      ui.el("#turn").textContent = `${turn}’s turn`;
+      draw();
+    }
+  });
+  events.on(ui.el("#next-round"), "click", () => {
+    round++;
+    restart();
+  });
+  events.on(ui.el("#opponent"), "change", (e) => {
+    mode = e.target.value;
+    wins = { X: 0, O: 0, draw: 0 };
+    round = 0;
+    ui.stat("x-wins", 0);
+    ui.stat("draws", 0);
+    ui.stat("o-wins", 0);
+    ui.el("#x-wins").previousElementSibling.textContent =
+      mode === "friend" ? "Player X" : "You · X";
+    ui.el("#o-wins").previousElementSibling.textContent =
+      mode === "friend" ? "Player O" : "CPU · O";
+    restart();
+  });
+  restart();
+  return {
+    restart,
+    isPlaying: () => board.some(Boolean) && !ended,
+    destroy: () => {
+      clearTimeout(timeout);
+      events.destroy();
+    },
+  };
 }
