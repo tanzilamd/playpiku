@@ -1,6 +1,12 @@
 const svg = (body) =>
   `<svg viewBox="0 0 400 240" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${body}</svg>`;
 export const art = {
+  rally: svg(
+    `<path d="M108 57h184q60 0 60 63t-60 63H108q-60 0-60-63t60-63Z" stroke="#d9d9bd" stroke-width="56"/><path d="M108 57h184q60 0 60 63t-60 63H108q-60 0-60-63t60-63Z" stroke="#465159" stroke-width="47"/><path d="M108 57h184q60 0 60 63t-60 63H108q-60 0-60-63t60-63Z" stroke="#e1dfb7" stroke-width="2" stroke-dasharray="9 12"/><g transform="translate(245 33) rotate(8 31 21)"><rect x="7" y="-4" width="12" height="50" rx="3" fill="#263733"/><rect x="43" y="-4" width="12" height="50" rx="3" fill="#263733"/><rect width="63" height="42" rx="12" fill="#f1cb7e"/><rect x="21" y="6" width="23" height="30" rx="6" fill="#37626b"/><path d="M52 9v7m0 11v6" stroke="#fff1c6" stroke-width="5"/></g><path d="m159 101 4 11 11 4-11 4-4 11-4-11-11-4 11-4" fill="#b8d496"/>`,
+  ),
+  defense: svg(
+    `<path d="M-10 162h102V78h116v84h102v-40h100" stroke="#c9b68d" stroke-width="34" stroke-linejoin="round"/><g fill="#173c31"><rect x="112" y="105" width="52" height="52" rx="11"/><rect x="229" y="67" width="52" height="52" rx="11"/><rect x="265" y="183" width="52" height="45" rx="11"/></g><circle cx="138" cy="131" r="18" fill="#c7e68f"/><path d="M138 131v-27" stroke="#456144" stroke-width="10"/><circle cx="255" cy="93" r="18" fill="#f0bd86"/><path d="m255 93 19 17" stroke="#795a3c" stroke-width="12"/><circle cx="291" cy="204" r="15" fill="#a4d4e9"/><path d="M291 204v-22" stroke="#517a89" stroke-width="7"/><g fill="#e7a58b"><rect x="38" y="151" width="23" height="23" rx="6"/><rect x="80" y="100" width="23" height="23" rx="6"/><rect x="155" y="67" width="23" height="23" rx="6"/></g><g fill="#344d3c"><circle cx="45" cy="160" r="2"/><circle cx="53" cy="160" r="2"/><circle cx="87" cy="109" r="2"/><circle cx="95" cy="109" r="2"/></g>`,
+  ),
   golf: svg(
     `<g transform="translate(77 22) rotate(-8 122 94)"><rect width="246" height="188" rx="18" fill="#295b48"/><rect x="10" y="10" width="226" height="168" rx="11" stroke="#acd08c" stroke-width="3"/><path d="M139 56v80" stroke="#173d35" stroke-width="15" stroke-linecap="round"/><path d="m55 139 46-100 94 0" stroke="#d5ebac" stroke-width="3" stroke-linecap="round" stroke-dasharray="3 10"/><circle cx="55" cy="139" r="9" fill="#fff4d9"/><circle cx="195" cy="41" r="11" fill="#142f29"/><path d="M195 41V5l25 9-25 8" stroke="#f2be9a" stroke-width="3" stroke-linejoin="round"/></g><path d="m351 167 3 9 9 3-9 3-3 9-3-9-9-3 9-3" fill="#436f58"/>`,
   ),

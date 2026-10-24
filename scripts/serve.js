@@ -1,6 +1,8 @@
 import http from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { resolve, extname, sep } from "node:path";
+import { games } from "../src/catalog.js";
+import { renderPage } from "./pages.js";
 const root = resolve(process.env.SERVE_DIR || ".");
 const mime = {
   ".html": "text/html",
@@ -18,6 +20,19 @@ http
         /^\/playpiku(?=\/|$)/,
         "",
       );
+      const gameMatch = /^\/play\/([a-z0-9-]+)\/?$/.exec(requested);
+      const game = gameMatch && games.find((g) => g.id === gameMatch[1]);
+      if (game && !url.pathname.endsWith("/")) {
+        res.writeHead(301, { Location: url.pathname + "/" + url.search });
+        res.end();
+        return;
+      }
+      if (game && root === resolve(import.meta.dirname, "..")) {
+        const template = await readFile(resolve(root, "index.html"), "utf8");
+        res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+        res.end(renderPage(template, game, games.length));
+        return;
+      }
       let file = resolve(root, "." + (requested || "/"));
       if (file !== root && !file.startsWith(root + sep)) {
         res.writeHead(403);

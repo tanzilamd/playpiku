@@ -3004,3 +3004,357 @@ dialog > .button {
   flex-wrap: wrap;
   row-gap: 8px;
 }
+/* Clean navigation, sharing and the larger arcade games */
+.game-page-heading {
+  flex-wrap: wrap;
+}
+.game-page-heading > div {
+  min-width: 0;
+}
+.game-page-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.game-page-actions .button {
+  gap: 10px;
+}
+.share-url {
+  display: block;
+  width: 100%;
+  background: #111922;
+  border: 1px solid #526246;
+  border-radius: 9px;
+  color: #d2e9ad;
+  padding: 13px;
+  font-size: 12px;
+  margin-top: 18px;
+}
+.art-racing {
+  background: #83ac8c;
+}
+.art-defense {
+  background: #8bb398;
+}
+.rally-options,
+.defense-options {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px 20px;
+  flex-wrap: wrap;
+}
+.rally-options label,
+.defense-options label {
+  gap: 9px;
+}
+.rally-wrap {
+  border-color: #617362;
+  touch-action: manipulation;
+}
+.rally-wrap canvas {
+  min-height: 215px;
+}
+.rally-road-status {
+  font-size: 11px;
+  color: #c0d1aa;
+  text-align: center;
+  margin: 12px 0 0;
+  min-height: 35px;
+}
+.rally-pad {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 340px;
+  justify-content: center;
+}
+.rally-pad button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2px;
+  border: 1px solid #5a6d4a;
+  background: #2c3d2d;
+  border-radius: 12px;
+  width: 94px;
+  min-height: 66px;
+  font-size: 28px;
+  line-height: 1;
+  touch-action: none;
+  user-select: none;
+}
+.rally-pad small {
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: #bcd59c;
+}
+.rally-pad .pressed {
+  background: #557044;
+  border-color: var(--lime);
+}
+.rally-demo {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 24px 0;
+}
+.rally-demo span {
+  font-size: 11px;
+  font-weight: bold;
+  padding: 13px 10px;
+  border: 1px solid #6d8652;
+  background: #34492c;
+  color: #d4eab4;
+  border-radius: 8px;
+}
+.defense-wrap {
+  position: relative;
+  border-color: #5c7755;
+}
+.defense-wrap canvas {
+  pointer-events: none;
+}
+.defense-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(8, minmax(0, 1fr));
+}
+.defense-grid button {
+  background: transparent;
+  border: 1px solid transparent;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border-radius: 4px;
+  touch-action: manipulation;
+}
+.defense-grid button:hover {
+  border-color: #f1e6bc88;
+}
+.defense-grid button.selected {
+  border: 2px solid #e8f4ac;
+  background: #daf6ac16;
+}
+.defense-grid button:focus-visible {
+  outline: 2px solid #fff0ba;
+  outline-offset: -3px;
+}
+.tower-choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 15px 0;
+}
+.tower-choice {
+  border: 1px solid #4b6341;
+  border-radius: 11px;
+  background: #293827;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  padding: 13px 5px;
+  min-height: 102px;
+}
+.tower-choice i {
+  display: block;
+  width: 20px;
+  height: 20px;
+  background: var(--tower-color);
+  border: 4px solid #243e2a;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--tower-color);
+  margin-bottom: 3px;
+}
+.tower-choice strong {
+  font-size: 12px;
+}
+.tower-choice small {
+  font-size: 10px;
+  color: #b8c79d;
+}
+.tower-choice[aria-pressed="true"] {
+  border-color: var(--lime);
+  background: #3b4e30;
+  box-shadow: inset 0 0 0 1px #b4d97f;
+}
+.tower-details {
+  background: #263225;
+  border: 1px solid #47583a;
+  border-radius: 12px;
+  padding: 16px;
+}
+.tower-details h3 {
+  font-size: 14px;
+  color: #e1edc5;
+}
+.tower-details p {
+  font-size: 11px;
+  color: #b1c0a2;
+  line-height: 1.8;
+  margin: 7px 0 12px;
+}
+.tower-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tower-actions .button {
+  padding: 9px 12px;
+  font-size: 11px;
+  min-height: 40px;
+}
+.defense-enemies {
+  font-size: 10px;
+  color: #b0c294;
+}
+.defense-demo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 24px 0;
+}
+.defense-demo span {
+  background: #35472d;
+  border: 1px solid #6c8550;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 10px;
+  color: #daf1b8;
+  font-weight: 700;
+}
+.defense-demo b {
+  color: #93ad79;
+}
+.defense-wrap .board-overlay {
+  padding: 14px;
+  gap: 10px;
+}
+.defense-wrap .board-overlay h2 {
+  font-size: 24px;
+}
+.defense-wrap .board-overlay p {
+  font-size: 12px;
+  line-height: 1.6;
+}
+@media (max-width: 540px) {
+  .game-page-actions {
+    width: 100%;
+    gap: 8px;
+  }
+  .game-page-actions .button {
+    font-size: 11px;
+    padding: 9px 12px;
+    min-height: 40px;
+  }
+  .rally-options {
+    gap: 8px;
+  }
+  .rally-options label {
+    font-size: 10px;
+    gap: 7px;
+  }
+  .rally-options select {
+    font-size: 10px;
+    padding: 7px;
+  }
+  .rally-pad {
+    gap: 9px;
+  }
+  .rally-pad button {
+    width: 85px;
+    min-height: 64px;
+  }
+  .rally-road-status {
+    font-size: 10px;
+  }
+  .tower-choices {
+    gap: 7px;
+  }
+  .tower-choice {
+    padding: 11px 3px;
+    min-height: 96px;
+  }
+  .tower-choice strong {
+    font-size: 11px;
+  }
+  .tower-choice small {
+    font-size: 9px;
+  }
+  .tower-details {
+    padding: 13px;
+  }
+  .tower-details h3 {
+    font-size: 13px;
+  }
+  .tower-details p {
+    font-size: 10px;
+  }
+  .defense-wrap .board-overlay h2 {
+    font-size: 19px;
+  }
+  .defense-wrap .board-overlay p {
+    font-size: 11px;
+  }
+  .defense-wrap .board-overlay .button {
+    font-size: 11px;
+    padding: 8px 12px;
+    min-height: 37px;
+  }
+}
+.rally-wrap .board-overlay {
+  padding: 14px;
+  gap: 10px;
+}
+.rally-wrap .board-overlay h2 {
+  font-size: 22px;
+  line-height: 1.25;
+}
+.rally-wrap .board-overlay p {
+  font-size: 12px;
+  line-height: 1.6;
+}
+.rally-wrap .board-overlay .button {
+  padding: 9px 14px;
+  min-height: 39px;
+}
+.defense-result {
+  margin-top: 15px;
+  padding: 18px;
+  border: 1px solid #789251;
+  border-radius: 12px;
+  background: #293b26;
+  text-align: center;
+}
+.defense-result h2 {
+  font-size: 20px;
+  line-height: 1.3;
+  color: #e4efc6;
+}
+.defense-result p {
+  font-size: 12px;
+  color: #c0cead;
+  margin: 9px 0 14px;
+}
+.defense-result .button {
+  font-size: 12px;
+  padding: 10px 15px;
+}
+@media (max-width: 540px) {
+  .rally-wrap .board-overlay p {
+    font-size: 11px;
+  }
+  .defense-result h2 {
+    font-size: 18px;
+  }
+  .defense-result p {
+    font-size: 11px;
+  }
+}

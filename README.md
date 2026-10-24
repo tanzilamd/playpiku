@@ -1,8 +1,8 @@
 # PlayPiku
 
-A little play. A better day. Twelve original browser games with an English interface, responsive layouts, first-visit tutorials, keyboard and touch controls, and local personal records.
+A little play. A better day. Fourteen browser games with an English interface, responsive layouts, first-visit tutorials, keyboard and touch controls, and local personal records.
 
-**Games:** Mini Golf, Word Hunt, Piku Stack, Block Puzzle, Minesweeper, Piku Dash, 2048, Memory Match, Snake, Reaction Test, Tic Tac Toe, and Brick Breaker.
+**Games:** Piku Rally, Pocket Tower Defense, Mini Golf, Word Hunt, Piku Stack, Block Puzzle, Minesweeper, Piku Dash, 2048, Memory Match, Snake, Reaction Test, Tic Tac Toe, and Brick Breaker.
 
 **Production:** [PlayPiku](https://tanzilahmed.tech/playpiku/) · [Deployment workflow](https://github.com/tanzilamd/playpiku/actions/workflows/pages.yml)
 
@@ -31,7 +31,7 @@ Browser tests use `/usr/bin/chromium` by default. If unavailable, install the Pl
 node --input-type=module -e 'import { chromium } from "@playwright/test"; console.log(chromium.executablePath())'
 ```
 
-To check the built output, run `SERVE_DIR=dist npm run dev`. Route URLs use hashes, so direct links and reloads work on GitHub Pages without a custom 404 page.
+To check the built output, run `SERVE_DIR=dist npm run dev`. Every game has a generated static page at `/playpiku/play/<id>/`, so direct links, reloads, and social previews work on GitHub Pages without a custom 404 page. The logo always links to `/playpiku/`. Legacy `#/play/<id>` links continue to work and are normalized to the clean game URL.
 
 To run the same desktop/mobile interaction checks against the deployed site:
 
@@ -63,9 +63,11 @@ Mini Golf features six handcrafted holes, drag-to-shoot plus keyboard/slider con
 
 The whole-site layout suite checks every game and help dialog across phone, landscape, tablet, and desktop widths, including large Memory Match and Minesweeper boards.
 
+Piku Rally has three tracks, unlimited Practice and three-lap Relaxed/Classic races, auto acceleration, keyboard and multi-touch steering/braking, pause, and reset penalties. Race records are stored separately by track and difficulty. Pocket Tower Defense has two maps, ten waves, three tower types, upgrades, a 70% sell refund, build previews, pause-to-plan, and 2× speed. Active races and defense matches restart when reloading; best records persist.
+
 ## Accessibility and controls
 
-All navigation and button-based games support keyboard interaction. The rules explain keyboard and touch controls per game. Timed/action games pause when hidden or when a help/settings dialog opens; they resume only when requested. Motion follows the operating system preference and can also be reduced in Settings. Sound is optional and off by default. Canvas-based Mini Golf, Piku Stack, Snake, Brick Breaker, and Piku Dash expose controls and score/status text but do not provide a fully equivalent nonvisual gameplay mode.
+All navigation and button-based games support keyboard interaction. The rules explain keyboard and touch controls per game. Timed/action games pause when hidden or when a help/settings dialog opens; they resume only when requested. Motion follows the operating system preference and can also be reduced in Settings. Sound is optional and off by default. Canvas-based Piku Rally, Pocket Tower Defense, Mini Golf, Piku Stack, Snake, Brick Breaker, and Piku Dash expose controls and score/status text but do not provide a fully equivalent nonvisual gameplay mode.
 
 ## Project structure
 
@@ -79,8 +81,12 @@ All navigation and button-based games support keyboard interaction. The rules ex
 - `tests/`: rule and browser interaction tests
 - `.github/workflows/pages.yml`: validation and GitHub Pages deployment
 
-## Link previews
+## Clean links and social previews
 
-The initial HTML includes Open Graph and Twitter metadata for crawlers that do not run JavaScript. `assets/playpiku-share-v1.png` is a 1200 × 630 PNG and is included in `dist/`. All hash-based game links share the arcade preview because URL fragments are not sent to preview crawlers.
+The logo, arcade navigation, and footer logo link directly to `https://tanzilahmed.tech/playpiku/`. Each game has its own static HTML page, for example `https://tanzilahmed.tech/playpiku/play/rally/`. The build generates these pages with a canonical URL, game-specific Open Graph/Twitter title, description, and 1200 × 630 PNG. Crawlers do not need JavaScript. A `<base>` element keeps all assets correct on nested pages.
 
-Regenerate the branded card with `node scripts/generate-share-card.js` after installing development dependencies and Chromium. The script uses local SVG art and no external images or fonts. Update the versioned image URL in `index.html` if the card changes so social platforms can fetch the new asset. Platforms may retain older previews until their cached scrape refreshes.
+All game cards, related links, and **Share game** use clean URLs. Share uses the native share sheet when available, then clipboard, with a selectable-link fallback. Browser back/forward and direct refresh work. Legacy fragment URLs are still accepted and normalized in the browser. Because fragments are never sent in HTTP requests, old `#/play/...` links necessarily use the homepage preview; new clean game URLs have individual previews. Old chat messages may keep a platform's previously cached preview until it is refreshed.
+
+Regenerate the home card and every game card with `node scripts/generate-share-card.js` after installing development dependencies and Chromium. The script uses the catalog and local SVG art, with no external fonts or images. `src/site.js` defines the site URL, base path and image version. When changing artwork, increment the share version there, regenerate the PNGs, update the homepage metadata image URLs in `index.html`, then build. Keep older images available for cached shares. `scripts/pages.js` is the shared static HTML renderer used by the build and local development server. `npm run build` checks that every required image exists.
+
+If the default development port is occupied, run browser tests with `PLAYPIKU_PORT=4186 npm run test:e2e`. The existing local server must be restarted after changing its server code or adding catalog entries. Normal frontend changes are picked up on reload.

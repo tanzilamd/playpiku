@@ -1,4 +1,5 @@
 import { games } from "./catalog.js";
+import { SITE_PATH, gamePath, readRoute, socialMetadata } from "./site.js";
 import { art } from "./art.js";
 import { arrow } from "./icons.js";
 import { get, set, sound, storageUnavailable, clearRecords } from "./store.js";
@@ -75,6 +76,13 @@ function bestLabel(game) {
             ? "stack-relaxed"
             : key),
   );
+  if (game.id === "rally") return "Practice or chase a lap record";
+  if (game.id === "defense") {
+    const wave = get("best:defense-meadow");
+    return wave === null
+      ? "Ten waves. Your strategy."
+      : `Best: ${wave} waves · Meadow`;
+  }
   if (game.id === "tictactoe") return "Solo or with a friend";
   if (best === null) return "A fresh challenge awaits";
   return `Your best: ${best}${game.id === "reaction" ? " ms" : game.id === "memory" ? " moves · Easy" : game.id === "mines" || game.id === "words" ? " sec · Easy" : game.id === "golf" ? " shots" : game.id === "stack" ? " floors · Relaxed" : " pts"}`;
@@ -84,7 +92,7 @@ function cards() {
     .filter((g) => category === "All games" || g.category === category)
     .map(
       (g, i) =>
-        `<article class="game-card" style="--card-index:${i}"><a class="game-art art-${g.color}" href="#/play/${g.id}" aria-label="Play ${g.name}">${art[g.id]}<span class="art-play" aria-hidden="true">▶</span><span class="game-category">${g.category}</span>${g.isNew ? '<span class="new-game">NEW</span>' : ""}</a><div class="card-body"><div class="card-heading"><h3><a href="#/play/${g.id}">${g.name}</a></h3><a href="#/play/${g.id}" class="card-arrow" aria-label="Play ${g.name}">${arrow}</a></div><p>${g.description}</p><div class="card-meta"><span class="status-dot"></span>${bestLabel(g)}</div></div></article>`,
+        `<article class="game-card" style="--card-index:${i}"><a class="game-art art-${g.color}" href="${gamePath(g.id)}" aria-label="Play ${g.name}">${art[g.id]}<span class="art-play" aria-hidden="true">▶</span><span class="game-category">${g.category}</span>${g.isNew ? '<span class="new-game">NEW</span>' : ""}</a><div class="card-body"><div class="card-heading"><h3><a href="${gamePath(g.id)}">${g.name}</a></h3><a href="${gamePath(g.id)}" class="card-arrow" aria-label="Play ${g.name}">${arrow}</a></div><p>${g.description}</p><div class="card-meta"><span class="status-dot"></span>${bestLabel(g)}</div></div></article>`,
     )
     .join("");
 }
@@ -92,9 +100,9 @@ function home() {
   document.title = "PlayPiku — A little play goes a long way";
   const recent = get("recent");
   const recentGame = games.find((g) => g.id === recent);
-  main.innerHTML = `<section class="hero"><div class="hero-copy"><div class="hero-badge"><span class="status-dot"></span> YOUR FIVE-MINUTE HAPPY PLACE</div><h1>A little play.<br>A <span>better day.</span><svg viewBox="0 0 390 18" aria-hidden="true"><path d="M4 12Q170-3 384 8"/></svg></h1><p>Big on fun. Light on everything else.<br>Pick a game, find your flow, and make a little time for play.</p><a href="#games" class="button primary" id="explore-games">Find your next favorite <span class="down-arrow">${arrow}</span></a><div class="hero-notes"><span>✓ No downloads</span><span>✓ No sign-ups</span><span>✓ Just play</span></div></div><a class="hero-feature" href="#/play/golf" aria-label="Play featured game Mini Golf"><div class="feature-top"><span><i></i> NEW IN THE ARCADE</span><span class="feature-star" aria-hidden="true">✳</span></div><div class="feature-art">${art.golf}</div><div class="feature-bottom"><div><span class="eyebrow">SIX LITTLE HOLES. ONE LOVELY BREAK.</span><strong>A little swing. A big smile.</strong></div><span class="feature-button" aria-hidden="true">${arrow}</span></div><span class="floating-label">Just one more putt…</span></a></section>
-  <section class="library" id="games" aria-labelledby="library-title"><div class="section-heading"><div><span class="eyebrow">GOOD TIMES, ZERO INSTALLS</span><h2 id="library-title">Your next little escape<span>.</span></h2></div><span class="game-count">${games.length} games. Endless “one more.”</span></div><div class="library-toolbar"><div class="filters" role="group" aria-label="Filter games">${["All games", "Puzzle", "Arcade", "Quick play"].map((c) => `<button data-filter="${c}" class="filter ${category === c ? "selected" : ""}" aria-pressed="${category === c}">${c}</button>`).join("")}</div><span class="library-note"><span aria-hidden="true">✦</span> A good break starts here</span></div><div class="game-grid" id="game-grid">${cards()}</div><p class="sr-only" id="filter-status" role="status"></p></section>
-  ${recentGame ? `<a class="resume-banner" href="#/play/${recentGame.id}"><span class="resume-icon" aria-hidden="true">↶</span><div><span class="eyebrow">BACK FOR ANOTHER ROUND?</span><h3>Pick up with ${recentGame.name}.</h3><p>Your next personal best could be one game away.</p></div><span class="button secondary">Let’s play ${arrow}</span></a>` : ""}
+  main.innerHTML = `<section class="hero"><div class="hero-copy"><div class="hero-badge"><span class="status-dot"></span> YOUR FIVE-MINUTE HAPPY PLACE</div><h1>A little play.<br>A <span>better day.</span><svg viewBox="0 0 390 18" aria-hidden="true"><path d="M4 12Q170-3 384 8"/></svg></h1><p>Big on fun. Light on everything else.<br>Pick a game, find your flow, and make a little time for play.</p><a href="#games" class="button primary" id="explore-games">Find your next favorite <span class="down-arrow">${arrow}</span></a><div class="hero-notes"><span>✓ No downloads</span><span>✓ No sign-ups</span><span>✓ Just play</span></div></div><a class="hero-feature" href="${gamePath("rally")}" aria-label="Play featured game Piku Rally"><div class="feature-top"><span><i></i> NEW IN THE ARCADE</span><span class="feature-star" aria-hidden="true">✳</span></div><div class="feature-art">${art.rally}</div><div class="feature-bottom"><div><span class="eyebrow">SMALL CAR. BIG LITTLE ADVENTURES.</span><strong>Find your racing rhythm.</strong></div><span class="feature-button" aria-hidden="true">${arrow}</span></div><span class="floating-label">Just one more lap…</span></a></section>
+  <section class="library" id="games" aria-labelledby="library-title"><div class="section-heading"><div><span class="eyebrow">GOOD TIMES, ZERO INSTALLS</span><h2 id="library-title">Your next little escape<span>.</span></h2></div><span class="game-count">${games.length} games. Endless “one more.”</span></div><div class="library-toolbar"><div class="filters" role="group" aria-label="Filter games">${["All games", "Puzzle", "Arcade", "Strategy", "Quick play"].map((c) => `<button data-filter="${c}" class="filter ${category === c ? "selected" : ""}" aria-pressed="${category === c}">${c}</button>`).join("")}</div><span class="library-note"><span aria-hidden="true">✦</span> A good break starts here</span></div><div class="game-grid" id="game-grid">${cards()}</div><p class="sr-only" id="filter-status" role="status"></p></section>
+  ${recentGame ? `<a class="resume-banner" href="${gamePath(recentGame.id)}"><span class="resume-icon" aria-hidden="true">↶</span><div><span class="eyebrow">BACK FOR ANOTHER ROUND?</span><h3>Pick up with ${recentGame.name}.</h3><p>Your next personal best could be one game away.</p></div><span class="button secondary">Let’s play ${arrow}</span></a>` : ""}
   <section class="break-note"><div class="mini-spark" aria-hidden="true">✳</div><div><h2>Less scrolling. More playing.</h2><p>A tiny corner of the internet for a well-earned break.<br>No accounts, no noise. Just you and your next high score.</p></div><span class="note-doodle" aria-hidden="true">☺</span></section>`;
   document.querySelectorAll("[data-filter]").forEach(
     (b) =>
@@ -137,26 +145,36 @@ async function route() {
   dispose();
   dispose = () => {};
   active = null;
-  const path = location.hash.replace(/^#\/?/, "");
-  const game = games.find((g) => path === "play/" + g.id);
+  const requested = readRoute(location);
+  const game = games.find((g) => requested.id === g.id);
+  const canonicalPath = game ? gamePath(game.id) : SITE_PATH;
+  if (
+    requested.legacy ||
+    location.pathname === SITE_PATH + "index.html" ||
+    location.pathname === "/"
+  ) {
+    history.replaceState(null, "", canonicalPath + location.search);
+  }
+  updateMetadata(game);
   currentGame = game;
   if (!game) {
     home();
-    if (path && path !== "main" && path !== "games")
+    if (requested.id && !game)
       toast("That game could not be found. Choose one below.");
     window.scrollTo(0, 0);
     return;
   }
   set("recent", game.id);
   document.title = `${game.name} — PlayPiku`;
-  main.innerHTML = `<section class="game-page"><div class="game-breadcrumb"><a href="#/">← All games</a><span>${game.category}</span></div><div class="game-page-heading"><div><span class="eyebrow">${game.tag}</span><h1>${game.name}<span>.</span></h1><p>${game.description}</p></div><button class="button secondary" id="help-button"><span class="help-icon">?</span> How to play</button></div><div class="game-workspace"><div class="play-panel" id="play-panel"><div class="loading">Getting your game ready…</div></div><aside class="game-aside"><span class="eyebrow">THE LITTLE DETAILS</span><h2>Find your flow.</h2><div class="aside-rule"><span class="aside-icon">◎</span><div><h3>The goal</h3><p>${game.goal}</p></div></div><div class="aside-rule"><span class="aside-icon">⌘</span><div><h3>Your controls</h3><p>${game.keys}</p></div></div><div class="aside-tip"><span aria-hidden="true">✦</span><h3>A little tip</h3><p>${game.tip}</p></div><p class="local-note">Your records stay in this browser.<br>No account needed. Ever.</p><button id="aside-help" class="text-button">New here? Learn to play →</button></aside></div><section class="more-games"><div><span class="eyebrow">SWITCH THINGS UP</span><h2>Another kind of fun.</h2></div><div class="related-links">${games
+  main.innerHTML = `<section class="game-page"><div class="game-breadcrumb"><a href="${SITE_PATH}">← All games</a><span>${game.category}</span></div><div class="game-page-heading"><div><span class="eyebrow">${game.tag}</span><h1>${game.name}<span>.</span></h1><p>${game.description}</p></div><div class="game-page-actions"><button class="button secondary" id="share-button">Share game ${arrow}</button><button class="button secondary" id="help-button"><span class="help-icon">?</span> How to play</button></div></div><div class="game-workspace"><div class="play-panel" id="play-panel"><div class="loading">Getting your game ready…</div></div><aside class="game-aside"><span class="eyebrow">THE LITTLE DETAILS</span><h2>Find your flow.</h2><div class="aside-rule"><span class="aside-icon">◎</span><div><h3>The goal</h3><p>${game.goal}</p></div></div><div class="aside-rule"><span class="aside-icon">⌘</span><div><h3>Your controls</h3><p>${game.keys}</p></div></div><div class="aside-tip"><span aria-hidden="true">✦</span><h3>A little tip</h3><p>${game.tip}</p></div><p class="local-note">Your records stay in this browser.<br>No account needed. Ever.</p><button id="aside-help" class="text-button">New here? Learn to play →</button></aside></div><section class="more-games"><div><span class="eyebrow">SWITCH THINGS UP</span><h2>Another kind of fun.</h2></div><div class="related-links">${games
     .filter((g) => g !== game)
     .slice(0, 3)
     .map(
       (g) =>
-        `<a href="#/play/${g.id}"><span class="related-art art-${g.color}">${art[g.id]}</span><span>${g.name}</span>${arrow}</a>`,
+        `<a href="${gamePath(g.id)}"><span class="related-art art-${g.color}">${art[g.id]}</span><span>${g.name}</span>${arrow}</a>`,
     )
     .join("")}</div></section></section>`;
+  document.querySelector("#share-button").onclick = () => shareGame(game);
   document.querySelector("#help-button").onclick = document.querySelector(
     "#aside-help",
   ).onclick = () => help(game);
@@ -221,6 +239,85 @@ document.querySelector(".skip-link").onclick = (e) => {
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) active?.pause?.();
 });
+function updateMetadata(game) {
+  const meta = socialMetadata(game, games.length);
+  document.querySelector('link[rel="canonical"]').href = meta.url;
+  for (const [key, value] of Object.entries({
+    "og:url": meta.url,
+    "og:title": meta.title,
+    "og:description": meta.description,
+    "og:image": meta.image,
+    "og:image:secure_url": meta.image,
+    "og:image:alt": meta.alt,
+    "twitter:title": meta.title,
+    "twitter:description": meta.description,
+    "twitter:image": meta.image,
+    "twitter:image:alt": meta.alt,
+    description: meta.description,
+  })) {
+    const el = document.querySelector(
+      `meta[property="${key}"],meta[name="${key}"]`,
+    );
+    if (el) el.content = value;
+  }
+}
+async function shareGame(game) {
+  active?.pause?.();
+  const meta = socialMetadata(game);
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: meta.title,
+        text: game.description,
+        url: meta.url,
+      });
+      return;
+    } catch (error) {
+      if (error.name === "AbortError") return;
+    }
+  }
+  try {
+    await navigator.clipboard.writeText(meta.url);
+    toast("Game link copied. Share a little fun!");
+  } catch {
+    openModal(
+      `<div class="modal-heading"><span class="eyebrow">SHARE A LITTLE FUN</span><button data-close class="icon-button" aria-label="Close">×</button></div><h2 id="modal-title">${game.name}</h2><p>Copy this game link to share:</p><input class="share-url" aria-label="Game link" readonly value="${meta.url}">`,
+    );
+    dialog.querySelector("input").select();
+  }
+}
+document.addEventListener("click", (e) => {
+  if (
+    e.defaultPrevented ||
+    e.button !== 0 ||
+    e.metaKey ||
+    e.ctrlKey ||
+    e.shiftKey ||
+    e.altKey
+  )
+    return;
+  const a = e.target.closest("a");
+  if (!a || a.target || a.hasAttribute("download")) return;
+  const url = new URL(a.href);
+  if (
+    url.origin !== location.origin ||
+    url.hash ||
+    !(
+      url.pathname === SITE_PATH ||
+      games.some((g) => url.pathname === gamePath(g.id))
+    )
+  )
+    return;
+  e.preventDefault();
+  if (
+    location.pathname !== url.pathname ||
+    location.search !== url.search ||
+    location.hash
+  )
+    history.pushState(null, "", url.pathname + url.search);
+  route();
+});
+window.addEventListener("popstate", route);
 window.addEventListener("hashchange", route);
 document.documentElement.classList.toggle(
   "reduce-motion",

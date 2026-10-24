@@ -52,6 +52,11 @@ export function clearRecords() {
     "words-classic",
     "stack-relaxed",
     "stack-classic",
+    "defense-meadow",
+    "defense-river",
+    ...["meadow", "sunset", "harbor"].flatMap((track) =>
+      ["relaxed", "classic"].map((mode) => `rally-${track}-${mode}`),
+    ),
   ];
   for (const id of ids) {
     memory.delete("best:" + id);
