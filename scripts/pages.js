@@ -1,13 +1,7 @@
 import { socialMetadata } from "../src/site.js";
-const escape = (s) =>
-  String(s).replace(
-    /[&<>"']/g,
-    (c) =>
-      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
-        c
-      ],
-  );
-export function renderPage(template, game = null, count = 17) {
+import { siteConfig, listedGames } from "../src/catalog.js";
+import { escapeHTML as escape } from "../src/text.js";
+export function renderPage(template, game = null, count = listedGames.length) {
   const meta = socialMetadata(game, count);
   let html = template.replace(
     /<title>[\s\S]*?<\/title>/,
@@ -43,6 +37,19 @@ export function renderPage(template, game = null, count = 17) {
     html = html.replace(
       '<main id="main" tabindex="-1"></main>',
       `<main id="main" tabindex="-1"><noscript><section class="game-page"><h1>${escape(game.name)}</h1><p>${escape(game.goal)}</p><p>Enable JavaScript to play this free browser game.</p><a href="/playpiku/">Browse all games</a></section></noscript></main>`,
+    );
+  html = html
+    .replace(
+      /(<a\s+data-developer-link\s+href=")[^"]*(")/,
+      (_, a, b) => a + escape(siteConfig.developer.url) + b,
+    )
+    .replace(
+      /(<span data-developer-name>)[\s\S]*?(<\/span>)/,
+      (_, a, b) => a + escape(siteConfig.developer.name) + b,
+    )
+    .replace(
+      "</head>",
+      `<style id="site-theme">:root{--lime:${siteConfig.accentColor}}</style></head>`,
     );
   return html;
 }

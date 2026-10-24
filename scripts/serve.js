@@ -1,7 +1,7 @@
 import http from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { resolve, extname, sep } from "node:path";
-import { games } from "../src/catalog.js";
+import { games, listedGames } from "../src/catalog.js";
 import { renderPage } from "./pages.js";
 const root = resolve(process.env.SERVE_DIR || ".");
 const mime = {
@@ -27,10 +27,13 @@ http
         res.end();
         return;
       }
-      if (game && root === resolve(import.meta.dirname, "..")) {
+      if (
+        (game || ["/", "/index.html", ""].includes(requested)) &&
+        root === resolve(import.meta.dirname, "..")
+      ) {
         const template = await readFile(resolve(root, "index.html"), "utf8");
         res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
-        res.end(renderPage(template, game, games.length));
+        res.end(renderPage(template, game || null, listedGames.length));
         return;
       }
       let file = resolve(root, "." + (requested || "/"));

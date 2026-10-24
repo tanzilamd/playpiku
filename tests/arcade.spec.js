@@ -1,3 +1,4 @@
+import { listedGames, categories, siteConfig } from "../src/catalog.js";
 import { test, expect } from "@playwright/test";
 async function game(page, id) {
   await page.goto(`./#/play/${id}`);
@@ -11,16 +12,29 @@ test("library filters, project-base assets, footer and mobile layout", async ({
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("./");
-  await expect(page.locator(".game-card")).toHaveCount(17);
-  await page.getByRole("button", { name: "Arcade", exact: true }).click();
-  await expect(page.locator(".game-card")).toHaveCount(8);
-  await page.getByRole("button", { name: "Quick play", exact: true }).click();
-  await expect(page.locator(".game-card")).toHaveCount(1);
-  await page.getByRole("button", { name: "All games", exact: true }).click();
-  await expect(page.locator(".game-card")).toHaveCount(17);
-  await expect(
-    page.getByRole("link", { name: "Tanzil", exact: false }),
-  ).toHaveAttribute("href", "https://tanzilahmed.tech/");
+  await expect(page.locator(".game-card")).toHaveCount(listedGames.length);
+  for (const category of categories) {
+    await page
+      .locator(".filters")
+      .getByRole("button", { name: category, exact: true })
+      .click();
+    await expect(page.locator(".game-card")).toHaveCount(
+      category === "All games"
+        ? listedGames.length
+        : listedGames.filter((game) => game.category === category).length,
+    );
+  }
+  await page
+    .locator(".filters")
+    .getByRole("button", { name: "All games", exact: true })
+    .click();
+  await expect(page.locator("[data-developer-link]")).toHaveAttribute(
+    "href",
+    siteConfig.developer.url,
+  );
+  await expect(page.locator("[data-developer-name]")).toHaveText(
+    siteConfig.developer.name,
+  );
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,

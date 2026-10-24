@@ -3881,3 +3881,18 @@ dialog > .button {
     padding: 10px 13px;
   }
 }
+.library-empty {
+  grid-column: 1 / -1;
+  padding: 28px;
+  color: var(--muted);
+  line-height: 1.8;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.hero h1,
+#library-title,
+.game-card h3,
+.game-page-heading h1,
+.feature-bottom strong {
+  overflow-wrap: anywhere;
+}

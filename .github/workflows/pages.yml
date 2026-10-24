@@ -18,12 +18,12 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm test
       - run: npx playwright install --with-deps chromium
       - name: Find Playwright browser
         run: echo "CHROMIUM_PATH=$(node --input-type=module -e 'import { chromium } from "@playwright/test"; console.log(chromium.executablePath())')" >> "$GITHUB_ENV"
-      - run: npm run test:e2e
       - run: npm run build
+      - run: npm test
+      - run: npm run test:e2e
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

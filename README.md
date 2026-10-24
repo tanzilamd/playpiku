@@ -6,6 +6,8 @@ A little play. A better day. Seventeen browser games with an English interface, 
 
 **Production:** [PlayPiku](https://tanzilahmed.tech/playpiku/) · [Deployment workflow](https://github.com/tanzilamd/playpiku/actions/workflows/pages.yml)
 
+**Customize:** Edit only [src/site-config.js](src/site-config.js) for game order/visibility, names/descriptions/categories, NEW badges, featured game, homepage text, accent color and developer credit. See the [Bangla editing guide](EDITING.md). Commit to `main`; GitHub Actions rebuilds previews, validates and deploys automatically. Hidden games keep working at their existing URLs.
+
 Built with HTML, CSS, and JavaScript modules. No runtime dependencies, remote fonts, game embeds, accounts, advertisements, or analytics. Developed by [Tanzil](https://tanzilahmed.tech/).
 
 ## Local development
@@ -78,7 +80,9 @@ All navigation and button-based games support keyboard interaction. The rules ex
 ## Project structure
 
 - `src/app.js`: routes, library, dialogs, preferences
-- `src/catalog.js`: English game descriptions and tutorials
+- `src/site-config.js`: the user-editable listing, homepage, color and credit settings
+- `src/configuration.js`: validates settings and resolves visible listings without disabling play URLs
+- `src/catalog.js`: game definitions and detailed English tutorials
 - `src/art.js`: original inline SVG game illustrations
 - `src/rules.js`: independently tested original game rules
 - `src/engines/`: independent rules, puzzle generation, and physics for the newer games
@@ -93,6 +97,6 @@ The logo, arcade navigation, and footer logo link directly to `https://tanzilahm
 
 All game cards, related links, and **Share game** use clean URLs. Share uses the native share sheet when available, then clipboard, with a selectable-link fallback. Browser back/forward and direct refresh work. Legacy fragment URLs are still accepted and normalized in the browser. Because fragments are never sent in HTTP requests, old `#/play/...` links necessarily use the homepage preview; new clean game URLs have individual previews. Old chat messages may keep a platform's previously cached preview until it is refreshed.
 
-Regenerate the home card and every game card with `node scripts/generate-share-card.js` after installing development dependencies and Chromium. The script uses the catalog and local SVG art, with no external fonts or images. `src/site.js` defines the site URL, base path and image version. When changing artwork, increment the share version there, regenerate the PNGs, update the homepage metadata image URLs in `index.html`, then build. Keep older images available for cached shares. `scripts/pages.js` is the shared static HTML renderer used by the build and local development server. `npm run build` checks that every required image exists.
+For normal edits in `src/site-config.js`, `npm run build` checks the generated share manifest and automatically regenerates PNGs when content changes. GitHub Actions installs Chromium and builds before running tests. The image URLs include a content revision so updated previews can be fetched while older image URLs keep resolving. For developer artwork changes, regenerate the home card and every game card with `node scripts/generate-share-card.js` after installing development dependencies and Chromium. The script uses the catalog and local SVG art, with no external fonts or images. `src/site.js` defines the site URL, base path and image version. When changing artwork, increment the share version there, regenerate the PNGs, update the homepage metadata image URLs in `index.html`, then build. Keep older images available for cached shares. `scripts/pages.js` is the shared static HTML renderer used by the build and local development server. `npm run build` checks that every required image exists.
 
-If the default development port is occupied, run browser tests with `PLAYPIKU_PORT=4186 npm run test:e2e`. The existing local server must be restarted after changing its server code or adding catalog entries. Normal frontend changes are picked up on reload. Production builds use a content-derived version on the entry script, stylesheet, and every local module import. This prevents older cached JavaScript from being mixed with newly deployed clean game pages.
+If the default development port is occupied, run browser tests with `PLAYPIKU_PORT=4186 npm run test:e2e`. The existing local server must be restarted after changing its server code, site config or catalog entries. Normal frontend changes are picked up on reload. Production builds use a content-derived version on the entry script, stylesheet, and every local module import. This prevents older cached JavaScript from being mixed with newly deployed clean game pages.

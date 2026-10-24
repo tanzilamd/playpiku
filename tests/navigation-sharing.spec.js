@@ -1,12 +1,21 @@
 import { test, expect } from "@playwright/test";
-import { games } from "../src/catalog.js";
-import { SITE_URL } from "../src/site.js";
+import { games, listedGames } from "../src/catalog.js";
+import { SITE_URL, SHARE_VERSION, socialMetadata } from "../src/site.js";
 function metadata(html) {
   return Object.fromEntries(
     [...html.matchAll(/<meta\b[^>]*>/gi)].map(([tag]) => {
       const key = /(?:property|name)="([^"]+)"/.exec(tag),
         value = /content="([^"]*)"/.exec(tag);
-      return key && value ? [key[1], value[1]] : ["", ""];
+      return key && value
+        ? [
+            key[1],
+            value[1].replace(
+              /&(amp|lt|gt|quot|#39);/g,
+              (_, key) =>
+                ({ amp: "&", lt: "<", gt: ">", quot: '"', "#39": "'" })[key],
+            ),
+          ]
+        : ["", ""];
     }),
   );
 }
@@ -20,26 +29,28 @@ test("logo, clean URLs, legacy links, reloads and back navigation work without h
     "href",
     "/playpiku/",
   );
-  await page
-    .getByRole("link", { name: "Play Piku Rally", exact: true })
-    .first()
-    .click();
+  const chosen = listedGames[0] || games[0];
+  if (listedGames.length)
+    await page.locator(".game-card .game-art").first().click();
+  else await page.goto(`./play/${chosen.id}/`);
   await page.locator("#help-done").click();
-  await expect(page).toHaveURL(/\/playpiku\/play\/rally\/$/);
+  await expect(page).toHaveURL(new RegExp(`/playpiku/play/${chosen.id}/$`));
   await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
     "content",
-    "Piku Rally — PlayPiku",
+    `${chosen.name} — PlayPiku`,
   );
   await page.reload();
   await expect(page.locator("#game-board")).toBeVisible();
   await page.getByRole("link", { name: "PlayPiku home" }).click();
   await expect(page).toHaveURL(/\/playpiku\/$/);
-  await expect(page.locator(".game-card")).toHaveCount(17);
+  await expect(page.locator(".game-card")).toHaveCount(listedGames.length);
   await page.goBack();
-  await expect(page.locator("h1")).toHaveText("Piku Rally.");
+  await expect(page.locator("h1")).toHaveText(`${chosen.name}.`);
   await page.goto("./#/play/golf");
   await expect(page).toHaveURL(/\/playpiku\/play\/golf\/$/);
-  await page.locator("#help-done").click();
+  await page.locator("#game-board").waitFor();
+  if (await page.locator("#help-done").isVisible())
+    await page.locator("#help-done").click();
   await page.getByRole("link", { name: "All games", exact: false }).click();
   await expect(page).toHaveURL(/\/playpiku\/$/);
 });
@@ -80,7 +91,7 @@ test("home variants and every game expose preview metadata and PNGs to crawlers 
     expect(response.status()).toBe(200);
     const tags = metadata(await response.text());
     expect(tags["og:url"]).toBe(SITE_URL);
-    expect(tags["og:image"]).toContain("playpiku-share-v3.png");
+    expect(tags["og:image"]).toContain(`playpiku-share-${SHARE_VERSION}.png`);
   }
   for (const game of games) {
     for (const agent of [
@@ -100,7 +111,11 @@ test("home variants and every game expose preview metadata and PNGs to crawlers 
       expect(html).toContain('<base href="/playpiku/"');
     }
     const response = await request.get(
-      new URL(`/playpiku/assets/share-${game.id}-v3.png`, baseURL).href,
+      new URL(
+        new URL(socialMetadata(game).image).pathname +
+          new URL(socialMetadata(game).image).search,
+        baseURL,
+      ).href,
     );
     expect(response.status()).toBe(200);
     expect(response.headers()["content-type"]).toContain("image/png");

@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { games } from "../src/catalog.js";
+import { games, listedGames } from "../src/catalog.js";
 test("whole-site layout, dialogs and controls stay usable across screen sizes", async ({
   page,
 }, info) => {
@@ -21,7 +21,7 @@ test("whole-site layout, dialogs and controls stay usable across screen sizes", 
   for (const [width, height] of sizes) {
     await page.setViewportSize({ width, height });
     await page.goto("./");
-    await expect(page.locator(".game-card")).toHaveCount(17);
+    await expect(page.locator(".game-card")).toHaveCount(listedGames.length);
     await page.keyboard.press("Tab");
     await expect(page.locator(".skip-link")).toBeFocused();
     await expect(page.locator(".skip-link")).toHaveCSS("clip-path", "none");

@@ -1,4 +1,7 @@
-export const games = [
+import config from "./site-config.js";
+import { resolveSiteConfig } from "./configuration.js";
+
+const definitions = [
   {
     id: "harvest",
     name: "Piku Harvest",
@@ -301,3 +304,6 @@ export const games = [
     demo: '<div class="brick-demo"><i></i><i></i><i></i><span>●</span><b>━━━━</b></div>',
   },
 ];
+
+export const { games, listedGames, featuredGame, categories, siteConfig } =
+  resolveSiteConfig(definitions, config);

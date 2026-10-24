@@ -1,26 +1,29 @@
+import { games, listedGames, siteConfig } from "./catalog.js";
+import { contentFingerprint } from "./configuration.js";
 export const SITE_PATH = "/playpiku/";
 export const SITE_URL = "https://tanzilahmed.tech/playpiku/";
 export const SHARE_VERSION = "v3";
+export const SHARE_REVISION = contentFingerprint({ config: siteConfig, games });
 export function gamePath(id) {
   return `${SITE_PATH}play/${encodeURIComponent(id)}/`;
 }
-export function socialMetadata(game = null, count = 17) {
+export function socialMetadata(game = null, count = listedGames.length) {
   const url = game ? new URL(`play/${game.id}/`, SITE_URL).href : SITE_URL;
   return {
     url,
     title: game
       ? `${game.name} — PlayPiku`
-      : "PlayPiku — A little play. A better day.",
+      : `PlayPiku — ${siteConfig.homepage.titleFirst} ${siteConfig.homepage.titleSecond}`,
     description: game
-      ? game.goal
-      : `${count} free browser games. Puzzles, races, strategy, and little adventures. No downloads or sign-ups — just play.`,
+      ? game.description
+      : `${count} free browser games. ${siteConfig.homepage.subtitle} ${siteConfig.homepage.subtitleSecond}`,
     image: new URL(
-      `assets/${game ? `share-${game.id}` : "playpiku-share"}-${SHARE_VERSION}.png`,
+      `assets/${game ? `share-${game.id}` : "playpiku-share"}-${SHARE_VERSION}.png?rev=${SHARE_REVISION}`,
       SITE_URL,
     ).href,
     alt: game
       ? `${game.name} on PlayPiku. ${game.description}`
-      : `PlayPiku — ${count} free browser games. A little play. A better day.`,
+      : `PlayPiku — ${count} free browser games. ${siteConfig.homepage.titleFirst} ${siteConfig.homepage.titleSecond}`,
   };
 }
 export function readRoute(location) {

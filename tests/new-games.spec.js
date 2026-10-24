@@ -1,3 +1,4 @@
+import { listedGames } from "../src/catalog.js";
 import { test, expect } from "@playwright/test";
 import {
   createMinefield,
@@ -228,7 +229,7 @@ test("Piku Dash accepts a board tap and cleans up on navigation", async ({
   await page.clock.runFor(20);
   await expect(page.locator("#jump")).toHaveText("Jump again ↑");
   await page.getByRole("link", { name: "All games", exact: false }).click();
-  await expect(page.locator(".game-card")).toHaveCount(17);
+  await expect(page.locator(".game-card")).toHaveCount(listedGames.length);
   await page.clock.runFor(5000);
   expect(errors).toEqual([]);
   await expect(page.locator(".board-overlay")).toHaveCount(0);

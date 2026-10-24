@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { games } from "../src/catalog.js";
 import { SITE_PATH, SITE_URL, gamePath, readRoute } from "../src/site.js";
+import { escapeHTML } from "../src/text.js";
 import { renderPage } from "../scripts/pages.js";
 test("logo links point at the plain homepage and legacy root/game fragments resolve safely", () => {
   const html = readFileSync("index.html", "utf8");
@@ -32,7 +33,7 @@ test("every public game page contains unique crawler-visible metadata and a vali
         ].map((m) => [m[1], m[2]]),
       );
     assert.equal(tags["og:url"], SITE_URL + "play/" + game.id + "/");
-    assert.ok(tags["og:title"].includes(game.name));
+    assert.ok(tags["og:title"].includes(escapeHTML(game.name)));
     assert.equal(tags["twitter:image"], tags["og:image"]);
     assert.equal(new URL(tags["og:image"]).protocol, "https:");
     images.add(tags["og:image"]);
