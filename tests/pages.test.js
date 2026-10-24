@@ -46,3 +46,20 @@ test("every public game page contains unique crawler-visible metadata and a vali
   }
   assert.equal(images.size, games.length);
 });
+
+test("release versioning covers static and dynamic imports without changing external URLs", async () => {
+  const { versionModule, versionEntry } = await import("../scripts/release.js");
+  const source =
+    'import { get } from "../store.js"; const game = import(`./games/${id}.js`); const external = "https://example.com/sdk.js";';
+  const transformed = versionModule(source, "abc123");
+  assert.ok(transformed.includes('"../store.js?v=abc123"'));
+  assert.ok(transformed.includes("`./games/${id}.js?v=abc123`"));
+  assert.ok(transformed.includes('"https://example.com/sdk.js"'));
+  assert.equal(
+    versionEntry(
+      '<link href="./src/styles.css"><script src="./src/app.js"></script>',
+      "abc123",
+    ),
+    '<link href="./src/styles.css?v=abc123"><script src="./src/app.js?v=abc123"></script>',
+  );
+});
