@@ -34,7 +34,7 @@ export default {
     },
     {
       id: "traffic",
-      show: true,
+      show: false,
       isNew: true,
       name: "Piku Traffic Rush",
       description: "Little lanes. Close calls. One more drive.",
