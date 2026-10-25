@@ -170,7 +170,7 @@ test("old Bubble Pop progress unlocks the new chapter and new gardens save and r
     sessionStorage.setItem("bubble-chapter", "yes");
     localStorage.setItem(
       "playpiku:bubble-progress",
-      JSON.stringify({ unlocked: 12, stars: [3, 2] }),
+      JSON.stringify({ unlocked: 12, stars: [3, 2, ...Array(9).fill(0), 3] }),
     );
     localStorage.setItem(
       "playpiku:bubble-save",
@@ -191,6 +191,7 @@ test("old Bubble Pop progress unlocks the new chapter and new gardens save and r
   });
   await clock(page);
   await open(page, "bubble");
+  await expect(page.locator('#bubble-level option[value="13"]')).toBeEnabled();
   await page.locator("#game-start").click();
   await page.keyboard.press("Space");
   await page.clock.runFor(1000);

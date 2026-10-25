@@ -23,6 +23,19 @@ export function mount(root, ctx) {
       Math.max(0, Math.min(3, Number(raw?.stars?.[i]) || 0)),
     ),
   };
+  // A player who finished the old final garden can enter the new chapter immediately.
+  const completed = progress.stars.reduce(
+    (last, stars, i) => (stars > 0 ? i + 1 : last),
+    0,
+  );
+  const unlocked = Math.min(
+    BUBBLE_LEVELS,
+    Math.max(progress.unlocked, completed + 1),
+  );
+  if (unlocked !== progress.unlocked) {
+    progress.unlocked = unlocked;
+    set("bubble-progress", progress);
+  }
   let world = saved || newBubble(),
     state = "ready",
     resuming = !!saved,
