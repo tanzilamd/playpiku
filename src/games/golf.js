@@ -242,6 +242,12 @@ export function mount(root, ctx) {
     }
   }
   function pause() {
+    if (drag) {
+      aim = drag.original;
+      drag = null;
+      update();
+      draw();
+    }
     if (state !== "rolling") return;
     state = "paused";
     drag = null;

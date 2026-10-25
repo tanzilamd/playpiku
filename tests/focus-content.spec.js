@@ -351,3 +351,42 @@ test("Focus pauses a golf shot and gives keyboard players a focused Resume actio
   await page.locator("#focus-exit").click();
   await expect(page.locator("#shots")).toHaveText("1");
 });
+
+test("changing focus view cancels an unfinished putt or block drag without spending a move", async ({
+  page,
+}) => {
+  await open(page, "golf");
+  const box = await page.locator("canvas").boundingBox();
+  await page.mouse.move(
+    box.x + (box.width * 90) / 480,
+    box.y + (box.height * 260) / 360,
+  );
+  await page.mouse.down();
+  await page.mouse.move(
+    box.x + (box.width * 50) / 480,
+    box.y + (box.height * 280) / 360,
+  );
+  await page.locator("#focus-button").focus();
+  await page.keyboard.press("Enter");
+  await page.mouse.up();
+  await expect(page.locator("#shots")).toHaveText("0");
+  await expect(page.locator("#game-start")).toBeEnabled();
+  await page.locator("#focus-exit").click();
+  await open(page, "blocks");
+  const piece = await page.locator('[data-piece="0"]').boundingBox(),
+    board = await page.locator(".blocks-grid").boundingBox();
+  await page.mouse.move(piece.x + piece.width / 2, piece.y + piece.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(
+    board.x + board.width * 0.4,
+    board.y + board.height * 0.4,
+    { steps: 5 },
+  );
+  await page.locator("#focus-button").focus();
+  await page.keyboard.press("Enter");
+  await page.mouse.up();
+  await expect(page.locator("#score")).toHaveText("0");
+  await expect(
+    page.locator(".blocks-grid .preview,.blocks-grid .invalid"),
+  ).toHaveCount(0);
+});

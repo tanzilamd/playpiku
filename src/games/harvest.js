@@ -248,6 +248,7 @@ export function mount(root, ctx) {
     startLevel(world.level);
   }
   function pause() {
+    origin = null;
     if (state !== "playing" || world.status !== "playing") return;
     state = "paused";
     if (busy) settle();

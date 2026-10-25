@@ -268,6 +268,12 @@ export function mount(root, ctx) {
   } else restart();
   return {
     restart,
+    pause: () => {
+      drag = null;
+      grid
+        .querySelectorAll(".preview,.invalid")
+        .forEach((cell) => cell.classList.remove("preview", "invalid"));
+    },
     isPlaying: () => score > 0 && !done,
     destroy: () => {
       persist();
