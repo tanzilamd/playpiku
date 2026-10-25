@@ -1,4 +1,24 @@
 export const METEOR_WAVE_SIZE = 8;
+export const METEOR_GUARDIANS = [
+  {
+    id: "garden",
+    name: "Garden Guardian",
+    color: "#bc98ce",
+    hint: "Watch the gaps in the three-shot fan.",
+  },
+  {
+    id: "tide",
+    name: "Tide Warden",
+    color: "#94d0d3",
+    hint: "Move away from the marked aim line.",
+  },
+  {
+    id: "solar",
+    name: "Solar Moth",
+    color: "#efc68e",
+    hint: "Find the open side between each sweeping fan.",
+  },
+];
 export function newMeteor() {
   return {
     ship: { x: 200, y: 492 },
@@ -140,7 +160,12 @@ export function stepMeteor(s, dt, input = {}, random = Math.random) {
     }
   } else if (!s.boss && s.spawned === METEOR_WAVE_SIZE && !s.enemies.length) {
     if (s.wave % 3 === 0 && s.spawned !== -1) {
+      const variant = (Math.floor(s.wave / 3) - 1) % METEOR_GUARDIANS.length;
       s.boss = {
+        variant,
+        volley: 0,
+        warning: null,
+        gift: false,
         x: 200,
         y: -65,
         hp: 28 + Math.floor(s.wave / 3) * 8,
@@ -159,21 +184,59 @@ export function stepMeteor(s, dt, input = {}, random = Math.random) {
   if (s.boss) {
     const b = s.boss;
     b.age += dt;
-    b.x = 200 + Math.sin(b.age * 0.65) * 125;
+    const variant = b.variant || 0;
+    b.x =
+      200 +
+      Math.sin(b.age * (variant === 1 ? 0.8 : 0.65)) *
+        (variant === 2 ? 115 : 125);
     b.y = Math.min(102, b.y + 65 * dt);
     b.fire -= dt;
+    if (variant === 1 && b.y >= 70 && b.fire <= 0.6 && !b.warning)
+      b.warning = { ...s.ship };
     if (b.y >= 70 && b.fire <= 0) {
-      for (let i = -1; i <= 1; i++)
-        s.hostile.push({
-          x: b.x,
-          y: b.y + 30,
-          vx: i * 65,
-          vy: 155 + Math.min(55, s.wave * 3),
-          r: 6,
-        });
-      b.fire = Math.max(0.65, 1.3 - s.wave * 0.02);
+      const speed = 155 + Math.min(55, s.wave * 3);
+      if (variant === 1) {
+        const target = b.warning || s.ship,
+          angle = Math.atan2(target.y - (b.y + 30), target.x - b.x);
+        for (const offset of [-0.16, 0, 0.16])
+          s.hostile.push({
+            x: b.x,
+            y: b.y + 30,
+            vx: Math.cos(angle + offset) * speed,
+            vy: Math.sin(angle + offset) * speed,
+            r: 6,
+          });
+      } else if (variant === 2) {
+        const lean = b.volley % 2 ? -0.27 : 0.27;
+        for (const offset of [-0.58, -0.29, 0, 0.29, 0.58]) {
+          const angle = Math.PI / 2 + offset + lean;
+          s.hostile.push({
+            x: b.x,
+            y: b.y + 30,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            r: 6,
+          });
+        }
+      } else
+        for (let i = -1; i <= 1; i++)
+          s.hostile.push({ x: b.x, y: b.y + 30, vx: i * 65, vy: speed, r: 6 });
+      b.volley = (b.volley || 0) + 1;
+      b.warning = null;
+      b.fire =
+        variant === 0
+          ? Math.max(0.85, 1.3 - s.wave * 0.02)
+          : variant === 1
+            ? 1.7
+            : 1.55;
+    }
+    if (!b.gift && b.hp <= b.maxHp / 2) {
+      b.gift = true;
+      s.pickups.push({ x: b.x, y: b.y + 35, type: "power" });
+      events.push("boss-gift");
     }
   }
+
   for (const e of s.enemies) {
     e.age += dt;
     e.y += e.speed * dt;

@@ -8,6 +8,7 @@ import {
 import { escapeHTML, displayGame } from "./text.js";
 import { SITE_PATH, gamePath, readRoute, socialMetadata } from "./site.js";
 import { art } from "./art.js";
+import { createFocusMode } from "./focus.js";
 import { arrow } from "./icons.js";
 import { normalizeFavorites, filterLibrary } from "./library.js";
 import { get, set, sound, storageUnavailable, clearRecords } from "./store.js";
@@ -19,6 +20,13 @@ let active = null,
   category = "All games",
   favoritesOnly = false,
   modalAfter = null;
+
+const focusMode = createFocusMode({
+  main,
+  pause: () => active?.pause?.(),
+  help: () => currentGame && help(currentGame),
+  toast,
+});
 
 export function toast(message) {
   const el = document.querySelector("#toast");
@@ -96,7 +104,7 @@ function bestLabel(game) {
             : key),
   );
   if (game.id === "bubble" && best === null)
-    return "12 gardens. A lovely little color journey.";
+    return "24 gardens. A lovely little color journey.";
   if (game.id === "harvest") return "24 gardens. Your own little journey.";
   if (game.id === "traffic") return "Endless drives or a 1,500 m challenge";
   if (game.id === "moto") return "12 trails. Race your best-time ghost.";
@@ -287,6 +295,7 @@ let navigationId = 0;
 async function route() {
   const id = ++navigationId;
   if (dialog.open) dialog.close();
+  focusMode.reset();
   dispose();
   dispose = () => {};
   active = null;
@@ -311,7 +320,7 @@ async function route() {
   }
   set("recent", game.id);
   document.title = `${game.name} — PlayPiku`;
-  main.innerHTML = `<section class="game-page"><div class="game-breadcrumb"><a href="${SITE_PATH}">← All games</a><span>${escapeHTML(game.category)}</span></div><div class="game-page-heading"><div><span class="eyebrow">${escapeHTML(game.tag)}</span><h1>${escapeHTML(game.name)}<span>.</span></h1><p>${escapeHTML(game.description)}</p></div><div class="game-page-actions">${siteConfig.library.favorites ? favoriteButton(game) : ""}<button class="button secondary" id="share-button">Share game ${arrow}</button><button class="button secondary" id="help-button"><span class="help-icon">?</span> How to play</button></div></div><div class="game-workspace"><div class="play-panel" id="play-panel"><div class="loading">Getting your game ready…</div></div><aside class="game-aside"><span class="eyebrow">THE LITTLE DETAILS</span><h2>Find your flow.</h2><div class="aside-rule"><span class="aside-icon">◎</span><div><h3>The goal</h3><p>${game.goal}</p></div></div><div class="aside-rule"><span class="aside-icon">⌘</span><div><h3>Your controls</h3><p>${game.keys}</p></div></div><div class="aside-tip"><span aria-hidden="true">✦</span><h3>A little tip</h3><p>${game.tip}</p></div><p class="local-note">Your records stay in this browser.<br>No account needed. Ever.</p><button id="aside-help" class="text-button">New here? Learn to play →</button></aside></div><section class="more-games"><div><span class="eyebrow">SWITCH THINGS UP</span><h2>Another kind of fun.</h2></div><div class="related-links">${listedGames
+  main.innerHTML = `<section class="game-page"><div class="game-breadcrumb"><a href="${SITE_PATH}">← All games</a><span>${escapeHTML(game.category)}</span></div><div class="game-page-heading"><div><span class="eyebrow">${escapeHTML(game.tag)}</span><h1>${escapeHTML(game.name)}<span>.</span></h1><p>${escapeHTML(game.description)}</p></div><div class="game-page-actions"><button class="button secondary" id="focus-button" aria-pressed="false">Focus mode</button>${siteConfig.library.favorites ? favoriteButton(game) : ""}<button class="button secondary" id="share-button">Share game ${arrow}</button><button class="button secondary" id="help-button"><span class="help-icon">?</span> How to play</button></div></div><div class="focus-toolbar" role="region" aria-label="Game focus controls" hidden><strong>${escapeHTML(game.name)}</strong><div><button class="button secondary small" id="focus-fullscreen" aria-pressed="false">Fullscreen</button><button class="icon-button" id="focus-help" aria-label="Game instructions">?</button><button class="button secondary small" id="focus-exit" title="Exit focus (Esc)">Exit focus ×</button></div></div><div class="game-workspace"><div class="play-panel" id="play-panel"><div class="loading">Getting your game ready…</div></div><aside class="game-aside"><span class="eyebrow">THE LITTLE DETAILS</span><h2>Find your flow.</h2><div class="aside-rule"><span class="aside-icon">◎</span><div><h3>The goal</h3><p>${game.goal}</p></div></div><div class="aside-rule"><span class="aside-icon">⌘</span><div><h3>Your controls</h3><p>${game.keys}</p></div></div><div class="aside-tip"><span aria-hidden="true">✦</span><h3>A little tip</h3><p>${game.tip}</p></div><p class="local-note">Your records stay in this browser.<br>No account needed. Ever.</p><button id="aside-help" class="text-button">New here? Learn to play →</button></aside></div><section class="more-games"><div><span class="eyebrow">SWITCH THINGS UP</span><h2>Another kind of fun.</h2></div><div class="related-links">${listedGames
     .filter((g) => g !== game)
     .slice(0, 3)
     .map(
@@ -338,6 +347,7 @@ async function route() {
       sound,
     });
     dispose = () => active?.destroy?.();
+    focusMode.bind();
     if (!get("seen:" + game.id, false)) help(game, true);
   } catch (e) {
     console.error(e);

@@ -172,6 +172,7 @@ test("Harvest terminal saves remain replayable and corrupt saves fall back to a 
 test("Traffic controls support lane changes, simultaneous touch holds, help pause, and earned car purchases", async ({
   page,
 }, info) => {
+  await installClock(page);
   await open(page, "traffic");
   await page.evaluate(() =>
     localStorage.setItem(
@@ -189,7 +190,6 @@ test("Traffic controls support lane changes, simultaneous touch holds, help paus
   );
   await expect(page.locator('[data-car="gold"]')).toBeDisabled();
   await page.locator("#traffic-garage").click();
-  await installClock(page);
   await page.locator("#game-start").click();
   await page.keyboard.press("ArrowLeft");
   await page.clock.runFor(1000);
@@ -401,6 +401,9 @@ test("resetting records includes new games and ghosts while keeping farm progres
       "traffic-challenge",
       "moto-trail-1",
       "moto-trail-12",
+      "golf-woodland",
+      "defense-orchard",
+      "defense-ridge",
     ])
       localStorage.setItem("playpiku:best:" + id, "100");
     localStorage.setItem("playpiku:moto-ghost:trail-1", "{}");
@@ -430,9 +433,12 @@ test("resetting records includes new games and ghosts while keeping farm progres
         "traffic-challenge",
         "moto-trail-1",
         "moto-trail-12",
+        "golf-woodland",
+        "defense-orchard",
+        "defense-ridge",
       ].map((id) => localStorage.getItem("playpiku:best:" + id)),
     ),
-  ).toEqual(Array(6).fill(null));
+  ).toEqual(Array(9).fill(null));
   expect(
     await page.evaluate(() =>
       localStorage.getItem("playpiku:moto-ghost:trail-12"),

@@ -84,7 +84,7 @@ test("bubble matching pops a group, drops disconnected bubbles, and wins on the 
   );
   assert.equal(miss.state.status, "lost");
 });
-test("all twelve bubble gardens can be cleared within their shot budget using legal visible shots", () => {
+test("all bubble gardens can be cleared within their shot budget using legal visible shots", () => {
   for (let level = 1; level <= BUBBLE_LEVELS; level++) {
     let s = newBubble(level, () => 0.1),
       count = 0;

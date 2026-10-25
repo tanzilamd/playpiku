@@ -174,7 +174,7 @@ test("Frost slows without multiplying slow effects, Cannon splash kills award go
   assert.equal(cannon.money, money + 20);
   assert.equal(stepDefense(cannon, 1 / 60).money, money + 20);
 });
-test("both maps can be defended through wave ten with a mixed tower strategy", () => {
+test("all maps can be defended through wave ten with a mixed tower strategy", () => {
   for (const map of Object.keys(DEFENSE_MAPS)) {
     let s = newDefense(map);
     const ranked = Array.from({ length: 96 }, (_, cell) => cell)

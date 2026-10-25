@@ -105,7 +105,7 @@ export default {
       show: true,
       isNew: false,
       name: "Mini Golf",
-      description: "Six little holes. One lovely round.",
+      description: "Two little courses. Twelve lovely holes.",
       category: "Arcade",
     },
     {

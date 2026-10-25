@@ -269,7 +269,7 @@ export function mount(root, ctx) {
       area,
       won
         ? world.level === BUBBLE_LEVELS
-          ? "All twelve gardens are blooming!"
+          ? `All ${BUBBLE_LEVELS} gardens are blooming!`
           : "A lovely little clear!"
         : "One more little try?",
       `${world.score} points · ${won ? "★".repeat(progress.stars[world.level - 1]) + " · " + world.shots + " shots left" : "Try swapping your next bubble or bouncing off a wall."}`,

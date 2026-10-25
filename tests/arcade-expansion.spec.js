@@ -4,6 +4,7 @@ import {
   fixtureConfig,
 } from "./library-fixture.js";
 import config from "../src/site-config.js";
+import { BUBBLE_LEVELS } from "../src/engines/bubble.js";
 async function useLibraryFixture(page) {
   const value = fixtureConfig(config);
   await page.route("**/src/site-config.js*", (route) =>
@@ -16,7 +17,7 @@ async function useLibraryFixture(page) {
 async function clock(page) {
   const now = new Date("2026-10-25T12:00:00Z");
   await page.clock.install({ time: now });
-  await page.clock.pauseAt(now);
+  await page.clock.pauseAt(new Date(now.valueOf() + 60000));
 }
 async function open(page, id) {
   await page.goto(`./play/${id}/`);
@@ -69,14 +70,14 @@ test("Bubble Pop clears a saved garden, awards stars, unlocks the next garden an
     ),
   ).toMatchObject({ unlocked: 2 });
   await page.getByRole("button", { name: "Next garden", exact: true }).click();
-  await expect(page.locator("#level")).toHaveText("2 / 12");
+  await expect(page.locator("#level")).toHaveText(`2 / ${BUBBLE_LEVELS}`);
   await page.locator("#bubble-pause").click();
   const before = await page.locator("#shots").textContent();
   await page.clock.runFor(4000);
   await expect(page.locator("#shots")).toHaveText(before);
   await page.reload();
   await expect(page.locator("#game-start")).toHaveText("Resume garden");
-  await expect(page.locator("#level")).toHaveText("2 / 12");
+  await expect(page.locator("#level")).toHaveText(`2 / ${BUBBLE_LEVELS}`);
   await expect(page.locator('#bubble-level option[value="2"]')).toBeEnabled();
 });
 test("Bubble Pop supports aiming, swapping, one shot per gesture, help pause and confirmed restart", async ({

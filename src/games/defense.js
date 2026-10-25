@@ -145,7 +145,12 @@ export function mount(root, ctx) {
   }
   function draw() {
     const path = DEFENSE_MAPS[mapId].path;
-    g.fillStyle = mapId === "meadow" ? "#294735" : "#284948";
+    g.fillStyle = {
+      meadow: "#294735",
+      river: "#284948",
+      orchard: "#394a38",
+      ridge: "#514638",
+    }[mapId];
     g.fillRect(0, 0, 600, 400);
     g.strokeStyle = "#8ca3761e";
     g.lineWidth = 1;
@@ -164,7 +169,12 @@ export function mount(root, ctx) {
     g.beginPath();
     g.moveTo(path[0].x * 50 + 25, path[0].y * 50 + 25);
     for (const p of path.slice(1)) g.lineTo(p.x * 50 + 25, p.y * 50 + 25);
-    g.strokeStyle = "#c8b38b";
+    g.strokeStyle =
+      mapId === "ridge"
+        ? "#d2b28c"
+        : mapId === "orchard"
+          ? "#c4b799"
+          : "#c8b38b";
     g.lineWidth = 38;
     g.lineJoin = "round";
     g.lineCap = "round";

@@ -11,7 +11,7 @@ const definitions = [
     description: "Bounce, match, and make a little color rain.",
     color: "bubbles",
     keys: "Drag & release · ← / → to aim · Space to shoot · X to swap",
-    goal: "Clear each of twelve bubble gardens by matching three or more colors or symbols before your shots run out.",
+    goal: "Clear each of twenty-four bubble gardens by matching three or more colors or symbols before your shots run out.",
     steps: [
       "Choose Start popping. Drag on the board to aim and release to shoot, or use the aim slider and Shoot bubble. On a keyboard, use left/right arrows and Space.",
       "Match at least three bubbles with the same color or symbol to pop them. Bubbles disconnected from the ceiling fall for extra points. Bounce off either side wall to reach around a cluster.",
@@ -51,7 +51,7 @@ const definitions = [
     steps: [
       "Start flying. Your ship fires automatically, so focus on moving: drag anywhere on the board, hold the arrow/WASD keys, or use the direction buttons. Your ship stays in the lower flight zone.",
       "Dodge coral enemy shots and incoming ships. Small enemies need one hit; rocks need two. Your ship starts with three hull points and one shield, with a brief grace period after each hit.",
-      "Collect ↑ for a twelve-second weapon upgrade, ◇ for a shield, and + for hull repair. Each cleared wave adds one shield. Beat every third wave’s guardian for a score bonus and one hull repair.",
+      "Face Garden Guardian, Tide Warden, and Solar Moth in rotation. Watch their different shot patterns and the Warden’s marked aim line. Collect ↑ for a twelve-second weapon upgrade, ◇ for a shield, and + for hull repair. Each cleared wave adds one shield. Beat every third wave’s guardian for a score bonus and one hull repair.",
     ],
     tip: "Use small movements to slip between shots. You do not have to destroy every enemy to advance; stay safe first.",
     demo: '<div class="dash-demo"><span>← Dodge →</span><b>↑</b><span>Auto-fire</span></div>',
@@ -138,7 +138,7 @@ const definitions = [
     description: "Build smart. Upgrade. Defend your little corner.",
     color: "defense",
     keys: "Tap grass to preview · Confirm Build · Arrows + Enter",
-    goal: "Defend two winding maps against ten waves. Build towers on grass, upgrade near bends, and protect your twenty lives.",
+    goal: "Defend four winding maps against ten waves. Build towers on grass, upgrade near bends, and protect your twenty lives.",
     steps: [
       "Choose Sprout for fast shots, Cannon for splash damage, or Frost to slow enemies. Tap grass to preview the range, then confirm Build. The path cannot be blocked.",
       "Tap a tower to upgrade it up to level three or sell it for 70% of everything spent. Defeating enemies and clearing waves earns more gold.",
@@ -153,16 +153,16 @@ const definitions = [
     category: "Arcade",
     isNew: false,
     tag: "A little swing. A big smile.",
-    description: "Six little holes. One lovely round.",
+    description: "Two little courses. Twelve lovely holes.",
     color: "fairway",
     keys: "Drag back · Aim + Shoot · Arrows / Space",
-    goal: "Putt the ball into all six cups in as few shots as possible. Bounce off walls and take your time — there is no timer.",
+    goal: "Choose Meadow Six or Woodland Six, then putt into all six cups in as few shots as possible. Bounce off walls and take your time — there is no timer.",
     steps: [
       "Drag back from the ball, then release to shoot in the opposite direction. A longer pull gives more power.",
       "You can also tap the course to aim, adjust the Aim and Power sliders, and select Shoot. Arrow keys adjust aim and power; Space shoots.",
       "Wait until the ball stops before your next shot. Reach each cup to move on. Reset ball returns to the tee and adds one penalty shot.",
     ],
-    tip: "A gentle finish helps the ball drop into the cup. Your round saves between shots. Best records compare the total shots across all six holes.",
+    tip: "A gentle finish helps the ball drop into the cup. Each course saves its round between shots and keeps a separate six-hole record.",
     demo: '<div class="golf-demo"><span>●</span><b>········</b><span>⚑</span></div>',
   },
   {

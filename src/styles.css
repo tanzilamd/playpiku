@@ -4158,3 +4158,219 @@ dialog > .button {
   min-width: 0;
   overflow-wrap: anywhere;
 }
+
+/* A quiet game view. Small screens keep scrolling when controls need the room. */
+.focus-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+.focus-toolbar strong {
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+.focus-toolbar > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.focus-toolbar .button {
+  min-height: 38px;
+  padding: 8px 12px;
+  font-size: 12px;
+}
+.focus-toolbar .icon-button {
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
+}
+.focus-mode {
+  scroll-behavior: auto;
+}
+.focus-mode .site-header,
+.focus-mode .site-footer,
+.focus-mode .announcement,
+.focus-mode .game-breadcrumb,
+.focus-mode .game-page-heading,
+.focus-mode .game-aside,
+.focus-mode .more-games {
+  display: none;
+}
+.focus-mode main {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  margin: 0;
+}
+.focus-mode .game-page {
+  padding: 0;
+}
+.focus-mode .game-workspace {
+  display: block;
+  padding: 12px max(10px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+}
+.focus-mode .play-panel {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 15px;
+}
+.focus-mode .game-stage {
+  width: 100%;
+  max-width: var(--focus-stage-width, 600px);
+}
+.focus-mode .canvas-wrap {
+  max-width: 100%;
+}
+.focus-mode .game-toolbar {
+  margin-bottom: 12px;
+}
+.focus-mode .game-controls {
+  margin-top: 14px;
+}
+.focus-mode .game-note {
+  margin-top: 10px;
+}
+.focus-mode .game-feedback {
+  min-height: 25px;
+  padding-top: 7px;
+}
+.focus-mode .game-options {
+  margin-bottom: 12px;
+}
+@media (max-width: 540px) {
+  .focus-toolbar {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+  .focus-toolbar strong {
+    font-size: 12px;
+    max-width: 105px;
+  }
+  .focus-toolbar > div {
+    gap: 5px;
+  }
+  .focus-toolbar .button {
+    font-size: 10px;
+    padding: 8px;
+    min-height: 36px;
+  }
+  .focus-toolbar .icon-button {
+    width: 30px;
+    height: 32px;
+  }
+  .focus-mode .play-panel {
+    padding: 12px 10px;
+    border-radius: 12px;
+  }
+}
+@media (min-width: 600px) and (max-height: 560px) and (orientation: landscape) {
+  .focus-mode .play-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 0.95fr);
+    gap: 8px 16px;
+    align-items: start;
+  }
+  .focus-mode .game-toolbar {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+  }
+  .focus-mode .game-stats {
+    gap: 15px;
+  }
+  .focus-mode .stat > strong {
+    font-size: 21px;
+  }
+  .focus-mode .game-options {
+    grid-column: 2;
+    grid-row: 2;
+    margin: 0;
+  }
+  .focus-mode .game-stage {
+    grid-column: 1;
+    grid-row: 1 / span 6;
+    align-self: start;
+    position: sticky;
+    top: calc(var(--focus-toolbar-height, 58px) + 12px);
+  }
+  .focus-mode .game-controls {
+    grid-column: 2;
+    grid-row: 3;
+    margin: 0;
+    gap: 8px;
+  }
+  .focus-mode .game-controls > .button {
+    font-size: 11px;
+    padding: 9px 12px;
+    min-height: 38px;
+  }
+  .focus-mode .game-note {
+    display: none;
+  }
+  .focus-mode .game-feedback {
+    grid-column: 2;
+    grid-row: 5;
+    font-size: 11px;
+  }
+  .focus-mode .game-stage:has(.defense-wrap) {
+    display: contents;
+  }
+  .focus-mode .defense-wrap {
+    grid-column: 1;
+    grid-row: 1 / span 7;
+    width: min(100%, var(--focus-stage-width, 100%));
+    position: sticky;
+    top: calc(var(--focus-toolbar-height, 58px) + 12px);
+    justify-self: center;
+    margin: 0;
+  }
+  .focus-mode .tower-choices {
+    grid-column: 2;
+    grid-row: 3;
+    margin: 0;
+  }
+  .focus-mode .tower-details {
+    grid-column: 2;
+    grid-row: 4;
+    padding: 10px;
+    margin: 0;
+  }
+  .focus-mode .tower-choice {
+    padding: 9px 6px;
+  }
+  .focus-mode .tower-actions .button {
+    min-height: 36px;
+    font-size: 11px;
+  }
+  .focus-mode .play-panel:has(.defense-wrap) .game-controls {
+    grid-row: 5;
+  }
+  .focus-mode .play-panel:has(.defense-wrap) .game-feedback {
+    grid-row: 6;
+  }
+  .focus-mode .board-overlay {
+    padding: 10px;
+    gap: 10px;
+  }
+  .focus-mode .board-overlay h2 {
+    font-size: 18px;
+  }
+  .focus-mode .board-overlay p {
+    font-size: 10px;
+    line-height: 1.4;
+  }
+  .focus-mode .board-overlay .button {
+    font-size: 11px;
+    padding: 8px 10px;
+    min-height: 36px;
+  }
+}

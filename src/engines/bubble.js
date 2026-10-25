@@ -1,5 +1,5 @@
 export const BUBBLE_RADIUS = 18;
-export const BUBBLE_LEVELS = 12;
+export const BUBBLE_LEVELS = 24;
 export const BUBBLE_COLORS = [
   "#f1a58e",
   "#a8d88b",
@@ -26,8 +26,14 @@ export function bubbleAmmo(board, random = Math.random) {
   const exposed = board.filter(
     (b) => !bubbleNeighbors(b, board).some((n) => n.row > b.row),
   );
+  const deepest = Math.max(-1, ...board.map((b) => b.row));
+  const frontier = exposed.filter((b) => b.row >= deepest - 1);
   const colors = [
-    ...new Set((exposed.length ? exposed : board).map((b) => b.color)),
+    ...new Set(
+      (frontier.length ? frontier : exposed.length ? exposed : board).map(
+        (b) => b.color,
+      ),
+    ),
   ];
   return colors.length
     ? colors[Math.min(colors.length - 1, Math.floor(random() * colors.length))]
@@ -35,15 +41,36 @@ export function bubbleAmmo(board, random = Math.random) {
 }
 export function newBubble(level = 1, random = Math.random) {
   level = Math.min(BUBBLE_LEVELS, Math.max(1, Math.floor(level) || 1));
-  const rows = 4 + Math.floor((level - 1) / 3),
-    colors = Math.min(5, 3 + Math.floor((level - 1) / 5));
+  const expanded = level > 12,
+    chapter = (level - 13) % 3;
+  const rows = expanded
+      ? 5 + Math.floor((level - 13) / 4)
+      : 4 + Math.floor((level - 1) / 3),
+    colors = expanded
+      ? level < 19
+        ? 4
+        : 5
+      : Math.min(5, 3 + Math.floor((level - 1) / 5));
   const board = [];
   for (let row = 0; row < rows; row++)
     for (let col = 0; col < (row % 2 ? 9 : 10); col++) {
+      // The new gardens have stepped sides and open arches, all anchored at the ceiling.
+      if (
+        expanded &&
+        row > 1 &&
+        ((chapter === 0 &&
+          (col < Math.floor(row / 3) || col > 8 - Math.floor(row / 3))) ||
+          (chapter === 1 && row > 3 && col >= 4 && col <= 5))
+      )
+        continue;
+      const band =
+        expanded && chapter === 2
+          ? Math.floor((col + Math.floor(row / 2)) / 3)
+          : Math.floor(col / 3);
       board.push({
         row,
         col,
-        color: (Math.floor(col / 3) + Math.floor(row / 2) + level) % colors,
+        color: (band + Math.floor(row / 2) + level) % colors,
       });
     }
   return {

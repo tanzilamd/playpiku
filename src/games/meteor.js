@@ -1,6 +1,6 @@
 import { frame, listen, keyboardAllowed, resultOverlay } from "./shared.js";
 import { drivingInput, raceResult } from "./driving.js";
-import { newMeteor, stepMeteor } from "../engines/meteor.js";
+import { newMeteor, stepMeteor, METEOR_GUARDIANS } from "../engines/meteor.js";
 import { get, record } from "../store.js";
 export function mount(root, ctx) {
   const events = listen();
@@ -154,13 +154,36 @@ export function mount(root, ctx) {
       } else ship(e.x, e.y, "#e6a28f", 1, true);
     }
     if (world.boss) {
-      const b = world.boss;
-      g.fillStyle = "#bc98ce";
+      const b = world.boss,
+        guardian = METEOR_GUARDIANS[b.variant || 0];
+      if (b.warning) {
+        g.strokeStyle = "#eec58c88";
+        g.lineWidth = 2;
+        g.setLineDash([5, 9]);
+        g.beginPath();
+        g.moveTo(b.x, b.y + 30);
+        g.lineTo(b.warning.x, b.warning.y);
+        g.stroke();
+        g.setLineDash([]);
+      }
+      g.fillStyle = guardian.color;
       g.beginPath();
       g.roundRect(b.x - 43, b.y - 22, 86, 44, 14);
       g.fill();
-      ship(b.x - 32, b.y + 12, "#debad8", 1.1, true);
-      ship(b.x + 32, b.y + 12, "#debad8", 1.1, true);
+      ship(
+        b.x - 32,
+        b.y + 12,
+        guardian.color,
+        b.variant === 2 ? 1.45 : 1.1,
+        true,
+      );
+      ship(
+        b.x + 32,
+        b.y + 12,
+        guardian.color,
+        b.variant === 2 ? 1.45 : 1.1,
+        true,
+      );
       circle(b.x, b.y, 12, "#485175");
       circle(b.x, b.y, 5, "#f1d4a5");
       g.fillStyle = "#42435c";
@@ -170,7 +193,7 @@ export function mount(root, ctx) {
       g.fillStyle = "#e4d4ec";
       g.font = "bold 10px Arial";
       g.textAlign = "center";
-      g.fillText("GARDEN GUARDIAN", 200, 16);
+      g.fillText(guardian.name.toUpperCase(), 200, 16);
     }
     for (const b of world.shots) {
       g.fillStyle = "#c7e8a5";
@@ -336,9 +359,10 @@ export function mount(root, ctx) {
         ui.say(`Wave ${world.wave}. Shield replenished by one.`);
       }
       if (result.includes("boss")) {
-        banner = "Guardian incoming! Keep moving.";
+        const guardian = METEOR_GUARDIANS[world.boss.variant];
+        banner = `${guardian.name} incoming!`;
         bannerTime = 2;
-        ui.say("Guardian incoming. Watch the gaps between its shots.");
+        ui.say(`${guardian.name}. ${guardian.hint}`);
       }
       if (result.includes("damage")) {
         ctx.sound("lose");

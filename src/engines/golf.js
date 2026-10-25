@@ -58,6 +58,79 @@ export const GOLF_HOLES = [
     ],
   },
 ];
+export const WOODLAND_HOLES = [
+  {
+    name: "Through the pines",
+    par: 3,
+    start: { x: 70, y: 270 },
+    cup: { x: 410, y: 90 },
+    walls: [{ x: 220, y: 150, w: 20, h: 150 }],
+  },
+  {
+    name: "Twin bridges",
+    par: 5,
+    start: { x: 70, y: 180 },
+    cup: { x: 410, y: 180 },
+    walls: [
+      { x: 155, y: 95, w: 20, h: 145 },
+      { x: 300, y: 120, w: 20, h: 160 },
+    ],
+  },
+  {
+    name: "Stepping stones",
+    par: 4,
+    start: { x: 80, y: 290 },
+    cup: { x: 400, y: 70 },
+    walls: [
+      { x: 170, y: 200, w: 70, h: 50 },
+      { x: 270, y: 110, w: 65, h: 50 },
+    ],
+  },
+  {
+    name: "Ribbon alley",
+    par: 4,
+    start: { x: 70, y: 85 },
+    cup: { x: 405, y: 285 },
+    walls: [
+      { x: 140, y: 130, w: 280, h: 20 },
+      { x: 60, y: 235, w: 260, h: 20 },
+    ],
+  },
+  {
+    name: "The moon window",
+    par: 2,
+    start: { x: 80, y: 180 },
+    cup: { x: 405, y: 180 },
+    walls: [
+      { x: 210, y: 40, w: 20, h: 105 },
+      { x: 210, y: 215, w: 20, h: 105 },
+    ],
+  },
+  {
+    name: "The last lantern",
+    par: 4,
+    start: { x: 75, y: 285 },
+    cup: { x: 390, y: 90 },
+    walls: [
+      { x: 160, y: 140, w: 20, h: 170 },
+      { x: 300, y: 45, w: 20, h: 160 },
+    ],
+  },
+];
+export const GOLF_COURSES = {
+  meadow: {
+    name: "Meadow Six",
+    holes: GOLF_HOLES,
+    recordKey: "golf",
+    saveKey: "golf-save",
+  },
+  woodland: {
+    name: "Woodland Six",
+    holes: WOODLAND_HOLES,
+    recordKey: "golf-woodland",
+    saveKey: "golf-save:woodland",
+  },
+};
 export function golfBall(hole) {
   return { ...hole.start, vx: 0, vy: 0, holed: false };
 }
@@ -185,11 +258,13 @@ export function stepGolf(ball, hole, dt) {
   return next;
 }
 export function validGolfSave(s) {
+  const course = GOLF_COURSES[s?.courseId ?? "meadow"];
+  if (!course) return false;
   if (
     !s ||
     !Number.isInteger(s.index) ||
     s.index < 0 ||
-    s.index >= GOLF_HOLES.length ||
+    s.index >= course.holes.length ||
     !Array.isArray(s.scores) ||
     s.scores.length !== s.index ||
     !s.scores.every((n) => Number.isSafeInteger(n) && n > 0) ||
@@ -205,6 +280,6 @@ export function validGolfSave(s) {
     s.ball.x <= 453 &&
     s.ball.y >= 27 &&
     s.ball.y <= 333 &&
-    !GOLF_HOLES[s.index].walls.some((w) => circleRect(s.ball, w, 6.9))
+    !course.holes[s.index].walls.some((w) => circleRect(s.ball, w, 6.9))
   );
 }
