@@ -13,21 +13,23 @@ test("library filters, project-base assets, footer and mobile layout", async ({
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("./");
   await expect(page.locator(".game-card")).toHaveCount(listedGames.length);
-  for (const category of categories) {
+  if (siteConfig.library.filters) {
+    for (const category of categories) {
+      await page
+        .locator(".filters")
+        .getByRole("button", { name: category, exact: true })
+        .click();
+      await expect(page.locator(".game-card")).toHaveCount(
+        category === "All games"
+          ? listedGames.length
+          : listedGames.filter((game) => game.category === category).length,
+      );
+    }
     await page
       .locator(".filters")
-      .getByRole("button", { name: category, exact: true })
+      .getByRole("button", { name: "All games", exact: true })
       .click();
-    await expect(page.locator(".game-card")).toHaveCount(
-      category === "All games"
-        ? listedGames.length
-        : listedGames.filter((game) => game.category === category).length,
-    );
   }
-  await page
-    .locator(".filters")
-    .getByRole("button", { name: "All games", exact: true })
-    .click();
   await expect(page.locator("[data-developer-link]")).toHaveAttribute(
     "href",
     siteConfig.developer.url,

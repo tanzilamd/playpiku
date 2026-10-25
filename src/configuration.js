@@ -20,6 +20,26 @@ export function resolveSiteConfig(definitions, config) {
     for (const key of ["name", "description", "category"])
       if (entry[key] !== undefined)
         fields[key] = text(entry[key], `${entry.id}.${key}`);
+    if (entry.minutes !== undefined) {
+      if (
+        !Number.isInteger(entry.minutes) ||
+        entry.minutes < 1 ||
+        entry.minutes > 180
+      )
+        fail(`${entry.id}.minutes must be a whole number from 1 to 180.`);
+      fields.minutes = entry.minutes;
+    }
+    for (const [field, choices] of Object.entries({
+      difficulty: ["Easy", "Medium", "Hard"],
+      mood: ["Relaxing", "Challenging"],
+      players: [1, 2],
+    })) {
+      if (entry[field] !== undefined) {
+        if (!choices.includes(entry[field]))
+          fail(`${entry.id}.${field} must be one of: ${choices.join(", ")}.`);
+        fields[field] = entry[field];
+      }
+    }
     if (fields.category === "All games")
       fail(
         "All games is reserved for the library filter. Choose another category.",
@@ -68,6 +88,82 @@ export function resolveSiteConfig(definitions, config) {
     fail("developer.url must use http:// or https://.");
   if (!/^#[a-f\d]{6}$/i.test(config.accentColor))
     fail("accentColor must be a six-digit hex color, for example #c7f36b.");
+  const switches = (source, defaults, group) => {
+    if (
+      source !== undefined &&
+      (!source || typeof source !== "object" || Array.isArray(source))
+    )
+      fail(`${group} must be an object of true/false switches.`);
+    return Object.fromEntries(
+      Object.entries(defaults).map(([key, fallback]) => {
+        const value =
+          source && Object.hasOwn(source, key) ? source[key] : fallback;
+        if (typeof value !== "boolean")
+          fail(`${group}.${key} must be true or false, without quotes.`);
+        return [key, value];
+      }),
+    );
+  };
+  const safeLink = (value, field, relative = false) => {
+    text(value, field);
+    if (relative && /^\/(?!\/)/.test(value) && !/[\\\s]/.test(value))
+      return value;
+    let parsed;
+    try {
+      parsed = new URL(value);
+    } catch {
+      fail(
+        `${field} must be a complete http:// or https:// link${relative ? " or a path beginning with /" : ""}.`,
+      );
+    }
+    if (!["http:", "https:"].includes(parsed.protocol))
+      fail(`${field} must use http:// or https://.`);
+    return value;
+  };
+  if (
+    config.announcement !== undefined &&
+    (!config.announcement ||
+      typeof config.announcement !== "object" ||
+      Array.isArray(config.announcement))
+  )
+    fail("announcement must be an object with show, text, linkText and url.");
+  const announcement = {
+    show: false,
+    text: "",
+    linkText: "",
+    url: "",
+    ...config.announcement,
+  };
+  if (typeof announcement.show !== "boolean")
+    fail("announcement.show must be true or false.");
+  for (const key of ["text", "linkText", "url"])
+    if (typeof announcement[key] !== "string")
+      fail(`announcement.${key} must be text.`);
+  if (announcement.show) text(announcement.text, "announcement.text");
+  if (announcement.url) {
+    safeLink(announcement.url, "announcement.url", true);
+    text(announcement.linkText, "announcement.linkText");
+  }
+  if (config.socialLinks !== undefined && !Array.isArray(config.socialLinks))
+    fail("socialLinks must be a list.");
+  const socialLinks = (config.socialLinks || []).map((link, i) => ({
+    label: text(link?.label, `socialLinks[${i}].label`),
+    url: safeLink(link?.url, `socialLinks[${i}].url`),
+  }));
+  const sections = switches(
+    config.sections,
+    { hero: true, recent: true, breakNote: true, relatedGames: true },
+    "sections",
+  );
+  const library = switches(
+    config.library,
+    { search: true, favorites: true, filters: true },
+    "library",
+  );
+  const footerText = text(
+    config.footerText ?? "Made for your “just one more” moments.",
+    "footerText",
+  );
   return {
     games,
     listedGames,
@@ -79,7 +175,16 @@ export function resolveSiteConfig(definitions, config) {
       "All games",
       ...new Set(listedGames.map((game) => game.category)),
     ],
-    siteConfig: { ...config, homepage, developer },
+    siteConfig: {
+      ...config,
+      homepage,
+      developer,
+      announcement,
+      socialLinks,
+      sections,
+      library,
+      footerText,
+    },
   };
 }
 export function contentFingerprint(value) {

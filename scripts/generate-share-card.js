@@ -10,6 +10,9 @@ const favicon = await readFile(
 );
 const copy = siteConfig.homepage;
 const palette = {
+  bubbles: "#86aeb6",
+  pinball: "#7e76a0",
+  cosmos: "#253f62",
   harvest: "#b4c98d",
   highway: "#9dbbb6",
   trails: "#b8c7b5",

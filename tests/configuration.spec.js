@@ -1,6 +1,11 @@
 import { test, expect } from "@playwright/test";
 import config from "../src/site-config.js";
 async function override(page, value) {
+  value = {
+    ...value,
+    sections: { hero: true, recent: true, breakNote: true, relatedGames: true },
+    library: { search: true, favorites: true, filters: true },
+  };
   await page.route("**/src/site-config.js*", (route) =>
     route.fulfill({
       contentType: "text/javascript",
@@ -25,7 +30,7 @@ test("a single config edit changes the homepage, order, categories, text, featur
     { id: "harvest", show: false },
   ];
   value.featuredGame = "harvest";
-  value.homepage.titleFirst = "Games & good times.";
+  value.homepage.titleFirst = "Games & good times for every little break.";
   value.homepage.titleSecond = "Your <little> break.";
   value.accentColor = "#ffaa88";
   value.developer = {
@@ -71,6 +76,21 @@ test("a single config edit changes the homepage, order, categories, text, featur
         .trim(),
     ),
   ).toBe("#ffaa88");
+  expect(
+    await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth <=
+        document.documentElement.clientWidth + 1,
+    ),
+  ).toBe(true);
+  await page.getByRole("button", { name: "Open settings" }).click();
+  expect(
+    await page.locator("dialog").evaluate((d) => {
+      const r = d.getBoundingClientRect();
+      return r.left >= 0 && r.right <= document.documentElement.clientWidth + 1;
+    }),
+  ).toBe(true);
+  await page.getByRole("button", { name: "Close settings" }).click();
   await page
     .getByRole("button", { name: "Racing & Rides", exact: true })
     .click();

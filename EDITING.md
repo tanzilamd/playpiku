@@ -27,6 +27,20 @@
 | ছোট badge, button ও library-এর লেখা | `homepage`-এর বাকি field                          |
 | Highlight/button-এর রঙ              | `accentColor`; যেমন `"#c7f36b"` বা `"#e8bd88"`    |
 | Footer-এর developer নাম ও link      | `developer.name`, `developer.url`                 |
+| Footer-এর ছোট লেখা                  | `footerText`                                      |
+| Announcement banner                 | `announcement.show`, `text`, `linkText`, `url`    |
+| Social/profile links                | `socialLinks`-এ `{ label, url }` block            |
+| Homepage-এর অংশ দেখানো/লুকানো       | `sections.hero`, `recent`, `breakNote`            |
+| Game page-এর related games          | `sections.relatedGames`                           |
+| Search / Favorites / filters দেখানো | `library.search`, `favorites`, `filters`          |
+| আনুমানিক খেলার সময়                  | প্রতি গেমের `minutes`; ১ থেকে ১৮০                 |
+| কঠিনতা                              | `difficulty`: `"Easy"`, `"Medium"`, `"Hard"`      |
+| খেলার ধরন                           | `mood`: `"Relaxing"` বা `"Challenging"`           |
+| একই ডিভাইসে দুজন খেলার সুবিধা       | `players: 1` বা `players: 2`                      |
+
+Favorites প্রতিটি খেলোয়াড়ের নিজের browser-এ থাকে; account লাগে না। Config থেকে Favorites বন্ধ করলে saved পছন্দ মুছবে না। গেম লুকালে Favorites তালিকাতেও দেখাবে না; আবার দেখালে আগের পছন্দ ফিরে আসবে। Settings-এর Reset records Favorites বা Bubble Pop-এর unlocked level/stars মুছবে না।
+
+Quick break ফিল্টার `minutes <= 5` গেম দেখায়। Relaxing/Challenging `mood` দিয়ে, আর 2 players `players: 2` দিয়ে নির্ধারিত হয়। সময় আনুমানিক—এটি timer বা gameplay বদলায় না। এই তথ্য সত্যিকারের গেমের সুবিধা অনুযায়ী দিন; `players: 2` লিখলেই নতুন multiplayer তৈরি হবে না।
 
 লুকানো গেম homepage, related games ও resume banner-এ থাকবে না। আগে share করা direct play link ঠিকই চলবে। Featured গেম লুকালে প্রথম visible গেমটি featured হবে।
 
@@ -52,6 +66,30 @@ featuredGame: "rally",
 ```
 
 এটি বিদ্যমান Rally block-এর জায়গায় edit করবেন; একই `id`-এর আরেকটি block যোগ করবেন না। `true` ও `false`-এর চারপাশে উদ্ধৃতি লাগে না।
+
+## Banner, links ও section-এর উদাহরণ
+
+```js
+announcement: {
+  show: true,
+  text: "Three new games are ready to play!",
+  linkText: "Try Bubble Pop",
+  url: "/playpiku/play/bubble/",
+},
+socialLinks: [
+  { label: "GitHub", url: "https://github.com/tanzilamd" },
+  { label: "My website", url: "https://tanzilahmed.tech/" },
+],
+sections: {
+  hero: true,
+  recent: true,
+  breakNote: false,
+  relatedGames: true,
+},
+library: { search: true, favorites: true, filters: true },
+```
+
+বিদ্যমান field-গুলোর জায়গায় edit করবেন। Announcement-এর link না চাইলে `url: ""`, `linkText: ""` রাখুন। Banner সব page-এ দেখা যাবে। Social links সম্পূর্ণ `https://` বা `http://` URL হতে হবে; banner-এর ক্ষেত্রে `/playpiku/.../` path-ও চলবে। `socialLinks: []` দিলে social links থাকবে না।
 
 ## কোন অংশ একই রাখবেন
 

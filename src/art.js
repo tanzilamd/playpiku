@@ -2,6 +2,38 @@ import { cropSVG } from "./crops.js";
 const svg = (body) =>
   `<svg viewBox="0 0 400 240" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${body}</svg>`;
 export const art = {
+  bubble: svg(
+    `<g transform="translate(83 17) rotate(-6 120 110)">${Array.from(
+      { length: 22 },
+      (_, i) => {
+        const row = Math.floor(i / 6),
+          col = i % 6,
+          c = ["#edaa95", "#aed18f", "#a4cbe4", "#c8a9dc"][
+            (Math.floor(col / 2) + Math.floor(row / 2)) & 3
+          ];
+        return `<circle cx="${22 + col * 36 + (row % 2) * 12}" cy="${20 + row * 32}" r="17" fill="${c}"/><circle cx="${17 + col * 36 + (row % 2) * 12}" cy="${14 + row * 32}" r="4" fill="#ffffff55"/>`;
+      },
+    ).join(
+      "",
+    )}<path d="m118 192 25-66" stroke="#e0ead099" stroke-width="3" stroke-dasharray="4 8"/><circle cx="118" cy="192" r="17" fill="#aed18f"/><path d="M95 213h46" stroke="#729690" stroke-width="10" stroke-linecap="round"/></g><path d="m334 134 5 12 12 5-12 5-5 12-5-12-12-5 12-5" fill="#eee4aa"/>`,
+  ),
+  pinball: svg(
+    `<g transform="translate(115 8) rotate(9 85 110)"><rect width="170" height="227" rx="27" fill="#302e4c" stroke="#8d7caa" stroke-width="6"/>${[
+      [55, 65],
+      [117, 65],
+      [86, 112],
+    ]
+      .map(
+        ([x, y], i) =>
+          `<circle cx="${x}" cy="${y}" r="21" fill="${["#d1afe1", "#acd0dd", "#edb8a1"][i]}"/><circle cx="${x - 4}" cy="${y - 5}" r="9" fill="#ffffff33"/>`,
+      )
+      .join(
+        "",
+      )}<path d="m25 142 23 30m97-30-23 30M45 188l29 12m51-12-29 12" stroke="#d8c5e9" stroke-width="12" stroke-linecap="round"/><circle cx="102" cy="160" r="8" fill="#f2f0df"/><path d="m105 173 10 23" stroke="#f2f0df88" stroke-width="2" stroke-dasharray="4 4"/></g><path d="m64 56 4 11 11 4-11 4-4 11-4-11-11-4 11-4" fill="#e4d8f1"/>`,
+  ),
+  meteor: svg(
+    `<g fill="#b4c7db">${Array.from({ length: 22 }, (_, i) => `<circle cx="${(i * 83 + 21) % 400}" cy="${(i * 47 + 11) % 240}" r="${i % 4 === 0 ? 2 : 1}"/>`).join("")}</g><circle cx="330" cy="61" r="34" fill="#3f5877"/><path d="M300 57q32 25 59 2" stroke="#58728e" stroke-width="7"/><g transform="translate(187 156) rotate(8)"><path d="m0-40 33 62-23-10L0 26l-10-14-23 10Z" fill="#c6e6a4"/><ellipse cy="-5" rx="8" ry="17" fill="#36597a"/><path d="m-8 28 8 31 8-31" fill="#ebc48c"/></g><g fill="#e4a595"><path d="m88 47-20 35 20-7 20 7Z"/><path d="m263 34-20 35 20-7 20 7Z"/></g><g stroke="#d3e9ab" stroke-width="5" stroke-linecap="round"><path d="M180 91V76m23 12V73"/></g><path d="m79 145 19-11 22 10-3 27-26 6-19-19Z" fill="#a89891"/>`,
+  ),
   harvest: svg(
     `<g transform="translate(77 19) rotate(-6 124 103)"><rect width="247" height="205" rx="18" fill="#38563c"/>${Array.from({ length: 12 }, (_, i) => `<g transform="translate(${10 + (i % 4) * 59},${10 + Math.floor(i / 4) * 62})"><rect width="51" height="54" rx="9" fill="${i < 3 ? "#6c8346" : "#4a6845"}"/>${cropSVG(i < 3 ? 0 : i % 5).replace("<svg ", '<svg width="49" height="50" y="2" x="1" ')}</g>`).join("")}</g><path d="m45 62 4 10 10 4-10 4-4 10-4-10-10-4 10-4" fill="#e5edb2"/>`,
   ),

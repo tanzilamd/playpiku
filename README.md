@@ -1,8 +1,8 @@
 # PlayPiku
 
-A little play. A better day. Seventeen browser games with an English interface, responsive layouts, first-visit tutorials, keyboard and touch controls, and local personal records.
+A little play. A better day. Twenty browser games with an English interface, responsive layouts, first-visit tutorials, keyboard and touch controls, and local personal records.
 
-**Games:** Piku Harvest, Piku Traffic Rush, Piku Moto Trails, Piku Rally, Pocket Tower Defense, Mini Golf, Word Hunt, Piku Stack, Block Puzzle, Minesweeper, Piku Dash, 2048, Memory Match, Snake, Reaction Test, Tic Tac Toe, and Brick Breaker.
+**Games:** Piku Bubble Pop, Piku Pinball, Piku Meteor, Piku Harvest, Piku Traffic Rush, Piku Moto Trails, Piku Rally, Pocket Tower Defense, Mini Golf, Word Hunt, Piku Stack, Block Puzzle, Minesweeper, Piku Dash, 2048, Memory Match, Snake, Reaction Test, Tic Tac Toe, and Brick Breaker.
 
 **Production:** [PlayPiku](https://tanzilahmed.tech/playpiku/) · [Deployment workflow](https://github.com/tanzilamd/playpiku/actions/workflows/pages.yml)
 
@@ -55,7 +55,7 @@ GitHub Pages must be available for the repository's visibility and account plan.
 
 ## What stays on the device
 
-Best scores, settings, first-visit guide preferences, and the current 2048 and Block Puzzle boards Mini Golf progress between shots, the current Harvest garden and farm progression, Traffic garage coins/owned cars, and Moto best-run ghosts use namespaced `localStorage`. They do not sync across devices. If storage is blocked, games still work and state lasts only for the current visit. Reset records in Settings clears best scores; clearing browser site data clears everything.
+Favorites, best scores, settings, first-visit guide preferences, and the current Bubble Pop board and garden unlocks/stars, 2048 and Block Puzzle boards, Mini Golf progress between shots, the current Harvest garden and farm progression, Traffic garage coins/owned cars, and Moto best-run ghosts use namespaced `localStorage`. They do not sync across devices. If storage is blocked, games still work and state lasts only for the current visit. Reset records in Settings clears best scores; clearing browser site data clears everything.
 
 Memory has three board sizes and separate best move counts. Snake has three speeds and separate best scores. Reaction Test records the best five-round average in milliseconds; device/input latency affects results. Tic Tac Toe supports two players on one device or easy/hard computer opponents, with a session-only match tally. Brick Breaker has three levels and three lives.
 
@@ -73,14 +73,19 @@ Piku Traffic Rush offers Endless and 1,500-metre Challenge modes, keyboard/swipe
 
 Piku Moto Trails has twelve countryside/desert/mountain tracks with smooth terrain, jumps, lean controls and gentle balance assistance. All tracks are available. Checkpoint returns add three seconds; final records include penalties. Finishing earns a medal. A new best run saves a bounded, validated ghost for that track, which can be hidden. Racing runs restart on reload. Reset records removes new best scores and Moto ghosts while keeping Harvest boards, level unlocks/stars and earned garage items.
 
+Piku Bubble Pop has twelve unlockable gardens, hex-grid bubble attachment, exact wall-bounce guides, color/symbol identification, free current/next swaps, connected-group pops and hanging-cluster drops. Settled boards, shots and stars save locally. An in-flight reload restores the previous settled shot. Pinball uses substepped ball/capsule physics, two simultaneously held flippers, three balls, a four-second one-use ball save, three nudges per ball and target-driven multipliers. Meteor auto-fires while players steer with relative drag, held touch buttons or keyboard; it includes temporary weapons, shield/repair pickups, brief hit invulnerability, waves and a guardian every third wave. Pinball and Meteor runs restart on reload; scores persist.
+
+The library supports local Favorites, search, category + quick/mood/two-player filters, and name/session-length sorting. Filter combinations and empty states are explicit. Approximate session times, difficulty, mood and local player counts can be edited alongside listings in `src/site-config.js`. The same file controls optional announcements, footer/social links, homepage sections and library controls; see [EDITING.md](EDITING.md). Favorites survive record resets and hidden games retain their preference for later re-enabling.
+
 ## Accessibility and controls
 
-All navigation and button-based games support keyboard interaction. The rules explain keyboard and touch controls per game. Timed/action games pause when hidden or when a help/settings dialog opens; they resume only when requested. Motion follows the operating system preference and can also be reduced in Settings. Sound is optional and off by default. Canvas-based Piku Traffic Rush, Piku Moto Trails, Piku Rally, Pocket Tower Defense, Mini Golf, Piku Stack, Snake, Brick Breaker, and Piku Dash expose controls and score/status text but do not provide a fully equivalent nonvisual gameplay mode.
+All navigation and button-based games support keyboard interaction. The rules explain keyboard and touch controls per game. Timed/action games pause when hidden or when a help/settings dialog opens; they resume only when requested. Motion follows the operating system preference and can also be reduced in Settings. Sound is optional and off by default. Canvas-based Piku Bubble Pop, Piku Pinball, Piku Meteor, Piku Traffic Rush, Piku Moto Trails, Piku Rally, Pocket Tower Defense, Mini Golf, Piku Stack, Snake, Brick Breaker, and Piku Dash expose controls and score/status text but do not provide a fully equivalent nonvisual gameplay mode.
 
 ## Project structure
 
 - `src/app.js`: routes, library, dialogs, preferences
 - `src/site-config.js`: the user-editable listing, homepage, color and credit settings
+- `src/library.js`: pure search/filter/sort and favorite normalization
 - `src/configuration.js`: validates settings and resolves visible listings without disabling play URLs
 - `src/catalog.js`: game definitions and detailed English tutorials
 - `src/art.js`: original inline SVG game illustrations

@@ -48,6 +48,10 @@ export function renderPage(template, game = null, count = listedGames.length) {
       (_, a, b) => a + escape(siteConfig.developer.name) + b,
     )
     .replace(
+      /(<p data-footer-text>)[\s\S]*?(<\/p>)/,
+      (_, a, b) => a + escape(siteConfig.footerText) + b,
+    )
+    .replace(
       "</head>",
       `<style id="site-theme">:root{--lime:${siteConfig.accentColor}}</style></head>`,
     );
