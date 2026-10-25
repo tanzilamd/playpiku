@@ -217,6 +217,13 @@ test("Meteor auto-fires, supports relative drag and held controls, freezes for h
   page,
 }) => {
   test.setTimeout(60000);
+  // A stationary ship can legitimately miss every randomly placed enemy.
+  // Use a reproducible encounter sequence while exercising real flight controls.
+  await page.addInitScript(() => {
+    let seed = 73;
+    Math.random = () =>
+      (seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 4294967296;
+  });
   await clock(page);
   await open(page, "meteor");
   await page.locator("#game-start").click();
