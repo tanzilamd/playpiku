@@ -3935,122 +3935,6 @@ dialog > .button {
 .social-links a:hover {
   color: var(--lime);
 }
-.library-discovery {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  flex-wrap: wrap;
-  margin-top: 28px;
-}
-.library-collections,
-.library-inputs {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  flex-wrap: wrap;
-  min-width: 0;
-}
-.collection-button {
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--surface);
-  color: var(--muted);
-  padding: 11px 16px;
-  font-size: 13px;
-  min-height: 44px;
-}
-.collection-button.selected {
-  border-color: #6f8560;
-  color: var(--text);
-  background: #283428;
-}
-.collection-button > span:first-child {
-  font-size: 18px;
-  vertical-align: -1px;
-  margin-right: 3px;
-}
-#favorites-count {
-  padding: 2px 6px;
-  background: #ffffff0b;
-  border-radius: 5px;
-  margin-left: 5px;
-  font-size: 11px;
-}
-.search-box {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 0 13px;
-  border: 1px solid #3b4658;
-  border-radius: 9px;
-  background: #191f2b;
-  min-height: 44px;
-}
-.search-box > span[aria-hidden] {
-  font-size: 22px;
-  color: #bbc7bc;
-}
-.search-box input {
-  background: transparent;
-  color: var(--text);
-  border: 0;
-  width: 215px;
-  max-width: 100%;
-  min-width: 0;
-  padding: 10px 0;
-  font-size: 13px;
-}
-.search-box:focus-within {
-  outline: 2px solid var(--lime);
-  outline-offset: 3px;
-}
-.search-box input:focus-visible {
-  outline: none;
-}
-.sort-box select {
-  min-height: 44px;
-}
-.library-toolbar {
-  margin-bottom: 12px;
-}
-.quick-filters {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.quick-filter {
-  border: 1px solid #353e4e;
-  background: transparent;
-  color: #afb8c7;
-  padding: 8px 13px;
-  border-radius: 22px;
-  font-size: 12px;
-  min-height: 38px;
-}
-.quick-filter:hover,
-.quick-filter.selected {
-  border-color: #7d8c6b;
-  background: #29332b;
-  color: #dfedcc;
-}
-.filter-explainer {
-  color: var(--muted);
-  font-size: 11px;
-  margin-top: 10px;
-}
-.library-results {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  min-height: 45px;
-  color: var(--muted);
-  font-size: 12px;
-  gap: 15px;
-}
-.library-results button {
-  font-size: 12px;
-}
 .game-card {
   position: relative;
   min-width: 0;
@@ -4083,22 +3967,6 @@ dialog > .button {
 .game-card .new-game {
   top: 19px;
   right: 64px;
-}
-.game-attributes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 13px;
-  margin-top: 15px;
-  font-size: 10px;
-  color: #c0c7d0;
-}
-.game-attributes span + span::before {
-  content: "·";
-  margin-right: 13px;
-  color: #677486;
-}
-.card-meta {
-  margin-top: 10px;
 }
 .game-favorite > span {
   font-size: 20px;
@@ -4253,23 +4121,6 @@ dialog > .button {
   border-color: #b6cf8a;
 }
 @media (max-width: 700px) {
-  .library-inputs {
-    width: 100%;
-    gap: 12px;
-  }
-  .search-box {
-    flex: 1;
-    min-width: 160px;
-  }
-  .search-box input {
-    width: 100%;
-  }
-  .sort-box {
-    flex: 1;
-  }
-  .sort-box select {
-    width: 100%;
-  }
   .announcement {
     margin: 12px 16px 0;
     padding: 12px 14px;
@@ -4285,12 +4136,6 @@ dialog > .button {
   }
 }
 @media (max-width: 390px) {
-  .collection-button {
-    padding: 10px 12px;
-  }
-  .quick-filter {
-    padding: 7px 11px;
-  }
   .game-card .new-game {
     right: 61px;
   }

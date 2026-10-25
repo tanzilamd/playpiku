@@ -307,44 +307,47 @@ test("favorites persist across home, game pages and reloads, and empty favorites
   await expect(page.locator(".library-empty")).toBeVisible();
   await expect(page.locator('[data-collection="favorites"]')).toBeFocused();
 });
-test("discovery combines categories, quick picks, search and sort, and clears empty matches", async ({
+test("a single category row puts Favorites next to All games without extra discovery controls", async ({
   page,
 }) => {
   await useLibraryFixture(page);
   await page.goto("./");
-  await page.locator('[data-quick="quick"]').click();
-  await expect(page.locator(".game-card")).toHaveCount(
-    listedGames.filter((g) => g.minutes <= 5).length,
+  const filters = page.locator(".filters");
+  await expect(filters.getByRole("button")).toHaveText([
+    "All games",
+    "Favorites",
+    "Arcade",
+    "Puzzle",
+    "Quick play",
+  ]);
+  await expect(
+    page.locator(
+      ".library-discovery,.library-results,.quick-filters,.filter-explainer,.game-attributes,#game-search,#game-sort",
+    ),
+  ).toHaveCount(0);
+  await expect(page.locator(".library .game-card")).toHaveCount(
+    listedGames.length,
   );
   await page.locator('[data-filter="Puzzle"]').click();
-  await page.locator('[data-quick="two"]').click();
   await expect(page.locator(".game-card")).toHaveCount(1);
+  await page.locator('[data-collection="favorites"]').click();
+  await expect(page.locator(".library-empty")).toContainText(
+    "Your favorites start here",
+  );
+  await expect(filters.locator('[aria-pressed="true"]')).toHaveText(
+    "Favorites",
+  );
+  await page.locator('[data-filter="All games"]').click();
+  await page.locator('[data-favorite="snake"]').click();
+  await page.locator('[data-collection="favorites"]').click();
+  await expect(page.locator(".game-card h3")).toHaveText("Snake");
+  await page.locator('[data-filter="Puzzle"]').click();
   await expect(page.locator(".game-card h3")).toHaveText("Tic Tac Toe");
-  await page
-    .getByRole("searchbox", { name: "Search games" })
-    .fill("no such game");
-  await expect(page.locator(".library-empty")).toBeVisible();
-  await page.locator("#clear-library").click();
+  await expect(filters.locator('[aria-pressed="true"]')).toHaveText("Puzzle");
+  await page.locator('[data-filter="All games"]').click();
   await expect(page.locator(".game-card")).toHaveCount(listedGames.length);
-  await page.locator('[data-quick="relaxing"]').click();
-  await expect(page.locator(".game-card")).toHaveCount(
-    listedGames.filter((g) => g.mood === "Relaxing").length,
-  );
-  await page.locator("#clear-library").click();
-  await page
-    .getByRole("searchbox", { name: "Search games" })
-    .fill("  PIKU BUBBLE ");
-  await expect(page.locator(".game-card")).toHaveCount(1);
-  await page.locator("#clear-library").click();
-  await page.locator("#game-sort").selectOption("name");
-  const names = await page.locator(".game-card h3").allTextContents();
-  expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b, "en")));
-  await page.locator("#game-sort").selectOption("shortest");
-  await expect(page.locator(".game-card h3").first()).toHaveText(
-    "Reaction Test",
-  );
 });
-test("one config controls announcement, safe social links, section visibility, metadata and library controls", async ({
+test("one config controls announcement, safe social links, section visibility and library controls", async ({
   page,
 }) => {
   const value = fixtureConfig(config);
@@ -367,8 +370,7 @@ test("one config controls announcement, safe social links, section visibility, m
     breakNote: false,
     relatedGames: false,
   };
-  value.library = { search: false, favorites: false, filters: false };
-  value.games.find((g) => g.id === "bubble").minutes = 2;
+  value.library = { favorites: false, filters: false };
   await page.route("**/src/site-config.js*", (route) =>
     route.fulfill({
       contentType: "text/javascript",
@@ -395,9 +397,6 @@ test("one config controls announcement, safe social links, section visibility, m
   await expect(page.locator(".site-footer > p").first()).toHaveText(
     value.footerText,
   );
-  await expect(
-    page.locator('[data-game="bubble"] .game-attributes'),
-  ).toContainText("≈2 min");
   await page.locator('[data-game="bubble"] .game-art').click();
   await page.locator("#help-done").click();
   await expect(page.locator(".more-games,.game-favorite")).toHaveCount(0);
@@ -421,7 +420,9 @@ test("hidden games leave favorites listings but keep their saved preference and 
     ),
   );
   await page.goto("./");
-  await expect(page.locator("#favorites-count")).toHaveText("1");
+  await expect(
+    page.locator('.filters [data-collection="favorites"]'),
+  ).toHaveText("Favorites");
   await page.locator('[data-collection="favorites"]').click();
   await expect(page.locator(".game-card")).toHaveCount(1);
   await expect(page.locator(".game-card h3")).toHaveText("Snake");

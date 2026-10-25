@@ -75,7 +75,7 @@ Piku Moto Trails has twelve countryside/desert/mountain tracks with smooth terra
 
 Piku Bubble Pop has twelve unlockable gardens, hex-grid bubble attachment, exact wall-bounce guides, color/symbol identification, free current/next swaps, connected-group pops and hanging-cluster drops. Settled boards, shots and stars save locally. An in-flight reload restores the previous settled shot. Pinball uses substepped ball/capsule physics, two simultaneously held flippers, three balls, a four-second one-use ball save, three nudges per ball and target-driven multipliers. Meteor auto-fires while players steer with relative drag, held touch buttons or keyboard; it includes temporary weapons, shield/repair pickups, brief hit invulnerability, waves and a guardian every third wave. Pinball and Meteor runs restart on reload; scores persist.
 
-The library supports local Favorites, search, category + quick/mood/two-player filters, and name/session-length sorting. Filter combinations and empty states are explicit. Approximate session times, difficulty, mood and local player counts can be edited alongside listings in `src/site-config.js`. The same file controls optional announcements, footer/social links, homepage sections and library controls; see [EDITING.md](EDITING.md). Favorites survive record resets and hidden games retain their preference for later re-enabling.
+The library uses one simple row: All games, Favorites, then categories. Cards show their description and personal-record summary. Local favorites persist in the current browser. Listings, category names, optional announcements, footer/social links, homepage sections, and Favorites/category-filter visibility can be edited in `src/site-config.js`; see [EDITING.md](EDITING.md). Favorites survive record resets and hidden games retain their preference for later re-enabling.
 
 ## Accessibility and controls
 
@@ -85,7 +85,7 @@ All navigation and button-based games support keyboard interaction. The rules ex
 
 - `src/app.js`: routes, library, dialogs, preferences
 - `src/site-config.js`: the user-editable listing, homepage, color and credit settings
-- `src/library.js`: pure search/filter/sort and favorite normalization
+- `src/library.js`: simple category/Favorites views and favorite normalization
 - `src/configuration.js`: validates settings and resolves visible listings without disabling play URLs
 - `src/catalog.js`: game definitions and detailed English tutorials
 - `src/art.js`: original inline SVG game illustrations

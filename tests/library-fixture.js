@@ -7,10 +7,6 @@ export const fixtureGames = [
     name: "Piku Bubble Pop",
     description: "Bounce and match a little color.",
     category: "Arcade",
-    minutes: 4,
-    difficulty: "Easy",
-    mood: "Relaxing",
-    players: 1,
   },
   {
     id: "meteor",
@@ -19,10 +15,6 @@ export const fixtureGames = [
     name: "Piku Meteor",
     description: "Find your orbit among the stars.",
     category: "Arcade",
-    minutes: 7,
-    difficulty: "Medium",
-    mood: "Challenging",
-    players: 1,
   },
   {
     id: "snake",
@@ -31,10 +23,6 @@ export const fixtureGames = [
     name: "Snake",
     description: "One more little bite.",
     category: "Arcade",
-    minutes: 3,
-    difficulty: "Medium",
-    mood: "Challenging",
-    players: 1,
   },
   {
     id: "tictactoe",
@@ -43,10 +31,6 @@ export const fixtureGames = [
     name: "Tic Tac Toe",
     description: "A friendly little rivalry.",
     category: "Puzzle",
-    minutes: 2,
-    difficulty: "Easy",
-    mood: "Relaxing",
-    players: 2,
   },
   {
     id: "reaction",
@@ -55,10 +39,6 @@ export const fixtureGames = [
     name: "Reaction Test",
     description: "Wait for green.",
     category: "Quick play",
-    minutes: 1,
-    difficulty: "Easy",
-    mood: "Challenging",
-    players: 1,
   },
 ];
 export function fixtureConfig(base) {
@@ -69,6 +49,6 @@ export function fixtureConfig(base) {
     announcement: { show: false, text: "", linkText: "", url: "" },
     socialLinks: [],
     sections: { hero: true, recent: true, breakNote: true, relatedGames: true },
-    library: { search: true, favorites: true, filters: true },
+    library: { favorites: true, filters: true },
   };
 }

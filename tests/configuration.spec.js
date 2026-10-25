@@ -4,7 +4,7 @@ async function override(page, value) {
   value = {
     ...value,
     sections: { hero: true, recent: true, breakNote: true, relatedGames: true },
-    library: { search: true, favorites: true, filters: true },
+    library: { favorites: true, filters: true },
   };
   await page.route("**/src/site-config.js*", (route) =>
     route.fulfill({

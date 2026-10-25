@@ -314,7 +314,7 @@ test("meteor objects stay bounded during an extended surviving flight", () => {
   assert.ok(s.wave > 5);
   assert.ok(s.score > 0);
 });
-test("favorites sanitize stored data, and discovery filters combine without changing configured order", () => {
+test("favorites sanitize stored data and simple category views preserve configured order", () => {
   assert.deepEqual(
     normalizeFavorites(
       ["snake", "snake", null, "bad", "bubble"],
@@ -323,47 +323,36 @@ test("favorites sanitize stored data, and discovery filters combine without chan
     ["snake", "bubble"],
   );
   assert.deepEqual(normalizeFavorites({}, []), []);
-  const quick = filterLibrary(listedGames, { quick: "quick" });
-  assert.ok(quick.length);
-  assert.ok(quick.every((g) => g.minutes <= 5));
-  assert.ok(
-    filterLibrary(listedGames, { quick: "two" }).some(
-      (g) => g.id === "tictactoe",
-    ),
-  );
-  assert.ok(
-    filterLibrary(listedGames, { quick: "two" }).every((g) => g.players === 2),
+  const original = listedGames.map((g) => g.id);
+  assert.deepEqual(
+    filterLibrary(listedGames).map((g) => g.id),
+    original,
   );
   assert.deepEqual(
-    filterLibrary(listedGames, { favoritesOnly: true }, ["snake"]).map(
-      (g) => g.id,
-    ),
+    filterLibrary(listedGames, { category: "Puzzle" }).map((g) => g.id),
+    ["tictactoe"],
+  );
+  assert.deepEqual(
+    filterLibrary(listedGames, { favoritesOnly: true }, [
+      "snake",
+      "bubble",
+    ]).map((g) => g.id),
+    ["bubble", "snake"],
+  );
+  assert.deepEqual(
+    filterLibrary(listedGames, { category: "Puzzle", favoritesOnly: true }, [
+      "snake",
+    ]).map((g) => g.id),
     ["snake"],
   );
-  assert.equal(
-    filterLibrary(listedGames, {
-      category: "Puzzle",
-      quick: "two",
-      search: "tic",
-    })[0].id,
-    "tictactoe",
-  );
-  assert.equal(
-    filterLibrary(listedGames, { search: "  BUBBLE POP " })[0].id,
-    "bubble",
-  );
-  assert.equal(
-    filterLibrary(listedGames, { search: "no such title" }).length,
-    0,
-  );
-  const original = listedGames.map((g) => g.id);
-  filterLibrary(listedGames, { sort: "name" });
+  assert.deepEqual(filterLibrary(listedGames, { favoritesOnly: true }), []);
+  assert.deepEqual(filterLibrary(listedGames, { category: "Missing" }), []);
   assert.deepEqual(
     listedGames.map((g) => g.id),
     original,
   );
 });
-test("extended config validates metadata, announcement links, social links and section switches", () => {
+test("extended config validates announcement links, social links and section switches", () => {
   const value = fixtureConfig(config);
   value.announcement = {
     show: true,
@@ -375,13 +364,8 @@ test("extended config validates metadata, announcement links, social links and s
     { label: "GitHub", url: "https://github.com/tanzilamd" },
   ];
   value.sections.hero = false;
-  value.games[0].minutes = 2;
-  assert.equal(resolveSiteConfig(games, value).listedGames[0].minutes, 2);
+  assert.equal(resolveSiteConfig(games, value).siteConfig.sections.hero, false);
   for (const edit of [
-    (v) => (v.games[0].minutes = 0),
-    (v) => (v.games[0].mood = "loud"),
-    (v) => (v.games[0].difficulty = "impossible"),
-    (v) => (v.games[0].players = 3),
     (v) => (v.announcement.url = "javascript:alert(1)"),
     (v) => (v.announcement.url = "//example.com"),
     (v) => (v.socialLinks[0].url = "data:text/html,x"),

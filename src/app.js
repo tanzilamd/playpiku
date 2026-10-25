@@ -9,7 +9,7 @@ import { escapeHTML, displayGame } from "./text.js";
 import { SITE_PATH, gamePath, readRoute, socialMetadata } from "./site.js";
 import { art } from "./art.js";
 import { arrow } from "./icons.js";
-import { QUICK_FILTERS, normalizeFavorites, filterLibrary } from "./library.js";
+import { normalizeFavorites, filterLibrary } from "./library.js";
 import { get, set, sound, storageUnavailable, clearRecords } from "./store.js";
 const main = document.querySelector("main");
 const dialog = document.querySelector("#modal");
@@ -17,10 +17,7 @@ let active = null,
   dispose = () => {},
   currentGame = null,
   category = "All games",
-  quick = "all",
-  search = "",
   favoritesOnly = false,
-  librarySort = "featured",
   modalAfter = null;
 
 export function toast(message) {
@@ -125,22 +122,18 @@ function favoriteButton(game, compact = false) {
   return `<button class="${compact ? "favorite-button" : "button secondary game-favorite"}${selected ? " saved" : ""}" data-favorite="${game.id}" aria-pressed="${selected}" aria-label="${selected ? "Remove " + escapeHTML(game.name) + " from favorites" : "Save " + escapeHTML(game.name) + " to favorites"}" title="${selected ? "Remove favorite" : "Save favorite"}"><span aria-hidden="true">${selected ? "♥" : "♡"}</span>${compact ? "" : selected ? "Favorited" : "Favorite"}</button>`;
 }
 function libraryMatches() {
-  return filterLibrary(
-    listedGames,
-    { category, quick, search, favoritesOnly, sort: librarySort },
-    favorites(),
-  );
+  return filterLibrary(listedGames, { category, favoritesOnly }, favorites());
 }
 function cards() {
   const matches = libraryMatches();
   if (!matches.length) {
     const empty = !listedGames.length;
-    return `<div class="library-empty"><span class="empty-heart" aria-hidden="true">${favoritesOnly ? "♡" : "✦"}</span><h3>${empty ? "The games are taking a little breather." : favoritesOnly && !favorites().some((id) => listedGames.some((g) => g.id === id)) ? "Your favorites start here." : "No games match this little wish."}</h3><p>${empty ? "Check back soon." : favoritesOnly ? "Save a game with its heart button, or adjust your filters." : "Try another name, category, or kind of break."}</p>${empty ? "" : '<button class="button secondary small" data-clear-library>Browse all games</button>'}</div>`;
+    return `<div class="library-empty"><span class="empty-heart" aria-hidden="true">${favoritesOnly ? "♡" : "✦"}</span><h3>${empty ? "The games are taking a little breather." : favoritesOnly && !favorites().some((id) => listedGames.some((g) => g.id === id)) ? "Your favorites start here." : "No games match this little wish."}</h3><p>${empty ? "Check back soon." : favoritesOnly ? "Tap the heart on a game to keep it here." : "Choose another category to find your next game."}</p>${empty ? "" : '<button class="button secondary small" data-clear-library>Browse all games</button>'}</div>`;
   }
   return matches
     .map((game, i) => {
       const g = displayGame(game);
-      return `<article class="game-card" data-game="${g.id}" style="--card-index:${i}"><a class="game-art art-${g.color}" href="${gamePath(g.id)}" aria-label="Play ${g.name}">${art[g.id]}<span class="art-play" aria-hidden="true">▶</span><span class="game-category">${g.category}</span>${g.isNew ? '<span class="new-game">NEW</span>' : ""}</a>${siteConfig.library.favorites ? favoriteButton(game, true) : ""}<div class="card-body"><div class="card-heading"><h3><a href="${gamePath(g.id)}">${g.name}</a></h3><a href="${gamePath(g.id)}" class="card-arrow" aria-label="Play ${g.name}">${arrow}</a></div><p>${g.description}</p><div class="game-attributes"><span>≈${g.minutes} min</span><span>${g.difficulty}</span><span>${g.players === 2 ? "1–2 players" : "Solo"}</span></div><div class="card-meta"><span class="status-dot"></span>${bestLabel(game)}</div></div></article>`;
+      return `<article class="game-card" data-game="${g.id}" style="--card-index:${i}"><a class="game-art art-${g.color}" href="${gamePath(g.id)}" aria-label="Play ${g.name}">${art[g.id]}<span class="art-play" aria-hidden="true">▶</span><span class="game-category">${g.category}</span>${g.isNew ? '<span class="new-game">NEW</span>' : ""}</a>${siteConfig.library.favorites ? favoriteButton(game, true) : ""}<div class="card-body"><div class="card-heading"><h3><a href="${gamePath(g.id)}">${g.name}</a></h3><a href="${gamePath(g.id)}" class="card-arrow" aria-label="Play ${g.name}">${arrow}</a></div><p>${g.description}</p><div class="card-meta"><span class="status-dot"></span>${bestLabel(game)}</div></div></article>`;
     })
     .join("");
 }
@@ -149,34 +142,17 @@ function refreshLibrary() {
   if (!grid) return;
   grid.innerHTML = cards();
   document.querySelectorAll("[data-filter]").forEach((b) => {
-    b.classList.toggle("selected", b.dataset.filter === category);
-    b.setAttribute("aria-pressed", b.dataset.filter === category);
+    const selected = !favoritesOnly && b.dataset.filter === category;
+    b.classList.toggle("selected", selected);
+    b.setAttribute("aria-pressed", selected);
   });
-  document.querySelectorAll("[data-quick]").forEach((b) => {
-    b.classList.toggle("selected", b.dataset.quick === quick);
-    b.setAttribute("aria-pressed", b.dataset.quick === quick);
+  document.querySelectorAll('[data-collection="favorites"]').forEach((b) => {
+    b.classList.toggle("selected", favoritesOnly);
+    b.setAttribute("aria-pressed", favoritesOnly);
   });
-  document.querySelectorAll("[data-collection]").forEach((b) => {
-    const chosen = (b.dataset.collection === "favorites") === favoritesOnly;
-    b.classList.toggle("selected", chosen);
-    b.setAttribute("aria-pressed", chosen);
-  });
-  const count = favorites().filter((id) =>
-    listedGames.some((g) => g.id === id),
-  ).length;
-  const favoriteCount = document.querySelector("#favorites-count");
-  if (favoriteCount) favoriteCount.textContent = count;
   const shown = libraryMatches().length;
   document.querySelector("#filter-status").textContent =
     `${shown} ${shown === 1 ? "game" : "games"} shown${favoritesOnly ? " in favorites" : ""}`;
-  const clear = document.querySelector("#clear-library");
-  if (clear)
-    clear.hidden =
-      category === "All games" &&
-      quick === "all" &&
-      !search &&
-      !favoritesOnly &&
-      librarySort === "featured";
 }
 function toggleFavorite(id) {
   const game = games.find((g) => g.id === id);
@@ -213,16 +189,10 @@ function toggleFavorite(id) {
 }
 function clearLibrary() {
   category = "All games";
-  quick = "all";
-  search = "";
   favoritesOnly = false;
-  librarySort = "featured";
-  const field = document.querySelector("#game-search");
-  if (field) field.value = "";
-  const order = document.querySelector("#game-sort");
-  if (order) order.value = librarySort;
   refreshLibrary();
 }
+
 function home() {
   const copy = Object.fromEntries(
     Object.entries(siteConfig.homepage).map(([k, v]) => [k, escapeHTML(v)]),
@@ -230,36 +200,35 @@ function home() {
   document.title = `PlayPiku — ${siteConfig.homepage.titleFirst} ${siteConfig.homepage.titleSecond}`;
   if (!categories.includes(category) || !siteConfig.library.filters)
     category = "All games";
-  if (!siteConfig.library.filters) quick = "all";
-  if (!siteConfig.library.search) search = "";
   if (!siteConfig.library.favorites) favoritesOnly = false;
   const recentGame = listedGames.find((g) => g.id === get("recent")),
     feature = featuredGame && displayGame(featuredGame);
   main.innerHTML = `${siteConfig.sections.hero ? `<section class="hero"><div class="hero-copy"><div class="hero-badge"><span class="status-dot"></span> ${copy.badge}</div><h1>${copy.titleFirst}<br><span>${copy.titleSecond}</span><svg viewBox="0 0 390 18" aria-hidden="true"><path d="M4 12Q170-3 384 8"/></svg></h1><p>${copy.subtitle}<br>${copy.subtitleSecond}</p><a href="#games" class="button primary" id="explore-games">${copy.button} <span class="down-arrow">${arrow}</span></a><div class="hero-notes"><span>✓ No downloads</span><span>✓ No sign-ups</span><span>✓ Just play</span></div></div>${feature ? `<a class="hero-feature" href="${gamePath(feature.id)}" aria-label="Play featured game ${feature.name}"><div class="feature-top"><span><i></i> ${copy.featureBadge}</span><span class="feature-star" aria-hidden="true">✳</span></div><div class="feature-art">${art[feature.id]}</div><div class="feature-bottom"><div><span class="eyebrow">${feature.tag}</span><strong>${feature.name}</strong></div><span class="feature-button" aria-hidden="true">${arrow}</span></div><span class="floating-label">${copy.featureSticker}</span></a>` : ""}</section>` : ""}
  <section class="library" id="games" aria-labelledby="library-title"><div class="section-heading"><div><span class="eyebrow">GOOD TIMES, ZERO INSTALLS</span><${siteConfig.sections.hero ? "h2" : "h1"} id="library-title">${copy.libraryTitle}<span>.</span></${siteConfig.sections.hero ? "h2" : "h1"}></div><span class="game-count">${listedGames.length} games. Endless “one more.”</span></div>
- <div class="library-discovery"><div class="library-collections" role="group" aria-label="Game collection"><button class="collection-button" data-collection="all" aria-pressed="${!favoritesOnly}">The arcade</button>${siteConfig.library.favorites ? `<button class="collection-button" data-collection="favorites" aria-pressed="${favoritesOnly}"><span aria-hidden="true">♡</span> Favorites <span id="favorites-count">0</span></button>` : ""}</div><div class="library-inputs">${siteConfig.library.search ? `<label class="search-box"><span class="sr-only">Search games</span><span aria-hidden="true">⌕</span><input id="game-search" type="search" placeholder="Find your next favorite…" value="${escapeHTML(search)}" maxlength="100" autocomplete="off"></label>` : ""}<label class="sort-box"><span class="sr-only">Sort games</span><select id="game-sort"><option value="featured">Featured order</option><option value="name">Name: A–Z</option><option value="shortest">Shortest first</option></select></label></div></div>
- ${siteConfig.library.filters ? `<div class="library-toolbar"><div class="filters" role="group" aria-label="Filter games">${categories.map((v) => `<button data-filter="${escapeHTML(v)}" class="filter" aria-pressed="${category === v}">${escapeHTML(v)}</button>`).join("")}</div><span class="library-note"><span aria-hidden="true">✦</span> ${copy.libraryNote}</span></div><div class="quick-filters" role="group" aria-label="Choose your kind of break">${QUICK_FILTERS.map(([id, label]) => `<button class="quick-filter" data-quick="${id}" aria-pressed="${quick === id}">${label}</button>`).join("")}</div><p class="filter-explainer">Quick break: about 5 minutes or less · 2 players: share one device</p>` : ""}
- <div class="library-results"><span id="filter-status" role="status" aria-live="polite"></span><button class="text-button" id="clear-library" data-clear-library hidden>Clear filters</button></div><div class="game-grid" id="game-grid">${cards()}</div></section>
+ <div class="library-toolbar"><div class="filters" role="group" aria-label="Filter games">${
+   siteConfig.library.filters || siteConfig.library.favorites
+     ? `<button data-filter="All games" class="filter" aria-pressed="${!favoritesOnly && category === "All games"}">All games</button>${siteConfig.library.favorites ? `<button class="filter" data-collection="favorites" aria-pressed="${favoritesOnly}">Favorites</button>` : ""}${
+         siteConfig.library.filters
+           ? categories
+               .slice(1)
+               .map(
+                 (v) =>
+                   `<button data-filter="${escapeHTML(v)}" class="filter" aria-pressed="${!favoritesOnly && category === v}">${escapeHTML(v)}</button>`,
+               )
+               .join("")
+           : ""
+       }`
+     : ""
+ }</div><span class="library-note"><span aria-hidden="true">✦</span> ${copy.libraryNote}</span></div>
+ <div class="game-grid" id="game-grid">${cards()}</div><p class="sr-only" id="filter-status" role="status" aria-live="polite"></p></section>
  ${siteConfig.sections.recent && recentGame ? `<a class="resume-banner" href="${gamePath(recentGame.id)}"><span class="resume-icon" aria-hidden="true">↶</span><div><span class="eyebrow">BACK FOR ANOTHER ROUND?</span><h3>Pick up with ${escapeHTML(recentGame.name)}.</h3><p>Your next personal best could be one game away.</p></div><span class="button secondary">Let’s play ${arrow}</span></a>` : ""}
  ${siteConfig.sections.breakNote ? '<section class="break-note"><div class="mini-spark" aria-hidden="true">✳</div><div><h2>Less scrolling. More playing.</h2><p>A tiny corner of the internet for a well-earned break.<br>No accounts, no noise. Just you and your next high score.</p></div><span class="note-doodle" aria-hidden="true">☺</span></section>' : ""}`;
-  uiLibrary();
   refreshLibrary();
   document.querySelector("#explore-games")?.addEventListener("click", (e) => {
     e.preventDefault();
     document.querySelector("#games").scrollIntoView({
       behavior: get("motion", false) ? "instant" : "smooth",
     });
-  });
-}
-function uiLibrary() {
-  document.querySelector("#game-search")?.addEventListener("input", (e) => {
-    search = e.target.value;
-    refreshLibrary();
-  });
-  document.querySelector("#game-sort").value = librarySort;
-  document.querySelector("#game-sort").addEventListener("change", (e) => {
-    librarySort = e.target.value;
-    refreshLibrary();
   });
 }
 main.addEventListener("click", (e) => {
@@ -272,24 +241,22 @@ main.addEventListener("click", (e) => {
   const filter = e.target.closest("[data-filter]");
   if (filter) {
     category = filter.dataset.filter;
-    refreshLibrary();
-    return;
-  }
-  const pick = e.target.closest("[data-quick]");
-  if (pick) {
-    quick = pick.dataset.quick;
+    favoritesOnly = false;
     refreshLibrary();
     return;
   }
   const collection = e.target.closest("[data-collection]");
   if (collection) {
-    favoritesOnly = collection.dataset.collection === "favorites";
+    favoritesOnly = true;
+    category = "All games";
     refreshLibrary();
     return;
   }
   if (e.target.closest("[data-clear-library]")) {
     clearLibrary();
-    document.querySelector("#game-search")?.focus({ preventScroll: true });
+    document
+      .querySelector('[data-filter="All games"]')
+      ?.focus({ preventScroll: true });
   }
 });
 window.addEventListener("storage", (e) => {

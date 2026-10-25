@@ -20,26 +20,6 @@ export function resolveSiteConfig(definitions, config) {
     for (const key of ["name", "description", "category"])
       if (entry[key] !== undefined)
         fields[key] = text(entry[key], `${entry.id}.${key}`);
-    if (entry.minutes !== undefined) {
-      if (
-        !Number.isInteger(entry.minutes) ||
-        entry.minutes < 1 ||
-        entry.minutes > 180
-      )
-        fail(`${entry.id}.minutes must be a whole number from 1 to 180.`);
-      fields.minutes = entry.minutes;
-    }
-    for (const [field, choices] of Object.entries({
-      difficulty: ["Easy", "Medium", "Hard"],
-      mood: ["Relaxing", "Challenging"],
-      players: [1, 2],
-    })) {
-      if (entry[field] !== undefined) {
-        if (!choices.includes(entry[field]))
-          fail(`${entry.id}.${field} must be one of: ${choices.join(", ")}.`);
-        fields[field] = entry[field];
-      }
-    }
     if (fields.category === "All games")
       fail(
         "All games is reserved for the library filter. Choose another category.",
@@ -157,7 +137,7 @@ export function resolveSiteConfig(definitions, config) {
   );
   const library = switches(
     config.library,
-    { search: true, favorites: true, filters: true },
+    { favorites: true, filters: true },
     "library",
   );
   const footerText = text(
